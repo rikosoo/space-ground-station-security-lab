@@ -1,0 +1,36 @@
+title: Telecommand outside the principal's authorized set
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a03
+status: stable
+description: >
+  A telecommand was submitted by a role whose allowlist does not contain it.
+  Under an enforcing configuration this is a blocked request; if the allowlist
+  is not enforced the same rule fires on an accepted command, which is why the
+  detection is written against the command/role pair rather than the outcome.
+references:
+  - https://sparta.aerospace.org/technique/EX-0012
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.privilege_escalation
+  - attack.t1078.004
+  - sparta.ex-0012
+logsource:
+  product: mission_control
+  service: api.command
+detection:
+  denied:
+    event_type: command.submit
+    attrs.reason: rbac_denied
+  unentitled:
+    event_type: command.submit
+    outcome: success
+    attrs.command: '%not_in_role_allowlist(attrs.role)%'
+  condition: denied or unentitled
+falsepositives:
+  - Role change that has not yet propagated to the authorization service
+level: high
+fields:
+  - actor
+  - attrs.role
+  - attrs.command
+  - src_ip

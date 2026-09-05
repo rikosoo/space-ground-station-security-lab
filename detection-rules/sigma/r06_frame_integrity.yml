@@ -1,0 +1,33 @@
+title: Clustered telemetry frame integrity failures
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a06
+status: stable
+description: >
+  Three or more downlinked frames failed their authentication tag within two
+  minutes. Individual failures are expected from a noisy radio link; a cluster
+  is not, and is the first observable of injected telemetry.
+references:
+  - https://sparta.aerospace.org/technique/IMP-0002
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.impact
+  - attack.t1565.002
+  - sparta.imp-0002
+logsource:
+  product: ground_station
+  service: gs.downlink
+detection:
+  selection:
+    event_type: downlink.frame
+    attrs.integrity: auth_tag_mismatch
+  timeframe: 2m
+  condition: selection | count() by actor >= 3
+falsepositives:
+  - Deep fade at very low elevation; correlate with attrs.elevation_deg before
+    escalating, and treat failures above 20 degrees as always suspicious
+level: high
+fields:
+  - actor
+  - attrs.seq
+  - attrs.elevation_deg
+  - attrs.channel_corrupted

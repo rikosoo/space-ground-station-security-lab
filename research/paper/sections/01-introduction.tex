@@ -1,0 +1,71 @@
+\section{Introduction}
+
+A modern satellite ground segment is, from the outside, a fairly ordinary cloud
+workload: an authenticated web API, a message stream, an object store, and a
+handful of serverless functions. From the inside it is not ordinary at all. Its
+actuator is a spacecraft that cannot be rebooted, re-imaged, physically
+inspected, or taken offline for maintenance. It is reachable for a few minutes a
+day --- in the configuration studied here, three passes totalling roughly
+\SI{22}{\minute} out of every \SI{24}{\hour}, leaving the adversary the other
+\SI{97}{\percent} of the day to work in. And the consequence of a successful
+attack is not data loss but the loss of a physical asset in orbit.
+
+The security guidance for this domain has grown quickly and is largely
+qualitative. Policy sets principles \cite{spd5}; introductory guidance describes
+the problem space \cite{nistir8270}; threat knowledge bases enumerate techniques
+\cite{sparta}; the research literature has established that the attack surface is
+real, both by analysis \cite{falco2019principles,manulis2021newspace,pavur2020launchpad}
+and by finding exploitable flaws in flight software actually used in orbit
+\cite{willbold2023odyssey}. The 2022 KA-SAT incident \cite{viasat2022}
+demonstrated that ground-segment compromise, rather than exotic attacks on the
+space segment, is the practical path to mission impact.
+
+What is scarce is measurement. Given a ground segment instrumented the way a
+competent team would instrument any cloud workload --- an audit trail, a
+streaming detection tier, findings aggregation, automated containment --- how
+quickly are attacks actually detected? Which log makes each one visible? How much
+noise do the same detections produce during a week in which nothing happens? Which
+defensive mechanism did the work: the one that produced the alert, or one that
+quietly prevented the attack from mattering? And what does the whole arrangement
+cost to run?
+
+\subsection*{Research question and sub-questions}
+
+\begin{quote}
+\textbf{RQ.} Can cloud-native security telemetry effectively detect cyberattacks
+against satellite ground segments?
+\end{quote}
+
+We decompose it into five measurable sub-questions:
+
+\begin{description}
+\item[RQ1 (Detection).] Are the five attack classes detected, and how long does
+detection take relative to the first malicious action?
+\item[RQ2 (Noise).] How many false positives do the same detections produce
+during benign operations, and at what precision?
+\item[RQ3 (Evidence).] Which log source and which rule identify each attack?
+\item[RQ4 (Attribution).] Which defensive mechanism prevents or limits each
+attack, as opposed to merely observing it?
+\item[RQ5 (Cost).] What does the architecture cost per month, and how does that
+cost scale with fleet size?
+\end{description}
+
+\subsection*{Contributions}
+
+\begin{enumerate}
+\item \textbf{A reproducible testbed} spanning spacecraft dynamics, RF link,
+ground station, mission-control API, cloud analytics and automated response,
+running deterministically on a virtual clock: fourteen simulated days in about
+two seconds, on a laptop, with no cloud account.
+\item \textbf{Five controlled attack scenarios} with explicit adversary
+capability levels and per-event ground-truth labels, enabling true positives to
+be defined causally rather than by temporal coincidence.
+\item \textbf{A detection pack of eleven rules} in two synchronised forms:
+executable Python that both the experiments and the deployed Lambda import, and
+portable Sigma \cite{sigma} for other backends.
+\item \textbf{An empirical evaluation} of detection latency, false positives,
+per-rule precision, a defence ablation that attributes outcomes to individual
+controls, a sensitivity analysis of the tuning parameters, and a cost model.
+\item \textbf{A labelled dataset} and the full analysis pipeline, so every number
+in this paper can be regenerated with one command.
+\end{enumerate}

@@ -1,0 +1,81 @@
+\documentclass[10pt,twocolumn]{article}
+
+\usepackage[margin=0.75in]{geometry}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage[hidelinks]{hyperref}
+\usepackage{siunitx}
+\usepackage{caption}
+\usepackage{balance}
+
+\sisetup{group-separator={,}}
+\captionsetup{font=small,labelfont=bf}
+
+% Numbers regenerated from research/results/*.json by make_macros.py.
+\IfFileExists{generated/results.tex}{\input{generated/results.tex}}{%
+  \typeout{WARNING: run `make macros` first; using placeholders}%
+  \newcommand{\ResTrials}{??}\newcommand{\ResWarmupDays}{??}%
+  \newcommand{\ResMeasureDays}{??}\newcommand{\ResEventsPerWindow}{??}%
+  \newcommand{\ResFPDay}{??}\newcommand{\ResFPDayCI}{??}%
+  \newcommand{\ResPrecision}{??}\newcommand{\ResTTDMean}{??}%
+  \newcommand{\ResTTDStream}{??}\newcommand{\CostMonthly}{??}%
+}
+
+\title{\textbf{A Cloud-Native Security Architecture for Detecting Cyber Threats
+in Satellite Ground Segments}}
+
+\author{%
+  \normalsize Space Ground Station Security Lab\\
+  \normalsize \url{https://github.com/rikosoo/space-ground-station-security-lab}
+}
+
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Satellite ground segments have become ordinary cloud workloads while retaining
+an extraordinary property: their actuator is a vehicle that cannot be rebooted,
+re-imaged, or taken offline. Security guidance for this domain is plentiful and
+largely qualitative; measurements of whether cloud-native security telemetry
+actually detects attacks against a ground segment are not. We ask a single
+question --- \emph{can cloud-native security telemetry effectively detect
+cyberattacks against satellite ground segments?} --- and answer it with a
+reproducible testbed rather than an architecture diagram. The testbed simulates
+the full chain from spacecraft to incident response, executes five controlled
+attacks (credential compromise, unauthorized telecommand, telemetry tampering,
+telecommand replay, and mission-data exfiltration), and measures detection
+latency, false positives, defensive-control attribution, and cost. Across
+\ResTrials{} trials all five attacks are detected, with a mean time to detect of
+\ResTTDMean{}\,s and \ResFPDay{}~$\pm$~\ResFPDayCI{} false positives per day at
+\ResPrecision{}\,\% precision, for a modelled cost of approximately
+USD~\CostMonthly{} per month for a single spacecraft. Three findings generalise
+beyond the testbed: detection latency is set by the tier a rule runs in rather
+than by the attack; cryptographic frame integrity and physics-aware analytics are
+complementary rather than redundant, because an adversary who disables the former
+is only visible to the latter; and reporting detection without reporting what the
+response failed to prevent overstates the security of the system. All code,
+detection content, labelled data and analysis scripts are released.
+\end{abstract}
+
+\input{sections/01-introduction}
+\input{sections/02-background}
+\input{sections/03-threat-model}
+\input{sections/04-architecture}
+\input{sections/05-detection}
+\input{sections/06-methodology}
+\input{sections/07-results}
+\input{sections/08-discussion}
+\input{sections/09-limitations}
+\input{sections/10-conclusion}
+
+\balance
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

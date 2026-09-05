@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+cloud/terraform/.build/
+cloud/terraform/.terraform/
+*.tfstate
+*.tfstate.backup
+research/paper/*.aux
+research/paper/*.log
+research/paper/*.out
+research/paper/*.fls
+research/paper/*.fdb_latexmk
+research/paper/*.bbl
+research/paper/*.blg

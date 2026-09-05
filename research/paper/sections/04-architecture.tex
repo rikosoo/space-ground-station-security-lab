@@ -1,0 +1,77 @@
+\section{Architecture}
+
+\subsection{Layers}
+
+The testbed implements five layers, each emitting events into one normalized
+schema:
+
+\begin{enumerate}
+\item \textbf{Spacecraft.} Circular-orbit propagation, power/thermal/attitude
+dynamics with physically bounded rates, a thirteen-command catalogue with a
+\emph{critical} flag, SDLS tag verification and an anti-replay window.
+\item \textbf{Ground station.} Pass geometry, an elevation-dependent frame error
+model, integrity verification of downlinked frames, and normalization of every
+observation into the event schema.
+\item \textbf{Mission-control API.} Authentication with optional second factor,
+role-based command allowlists, per-principal rate limiting, and a pass-window
+feasibility check. Frames are signed here before transmission.
+\item \textbf{Cloud.} A stream carrying normalized events, an encrypted object
+store for telemetry products, an audit trail covering both management and object
+data events, a streaming detection function, findings aggregation, metrics and
+alarms.
+\item \textbf{Response.} A containment function subscribed to high and critical
+findings, implementing the containment step --- and only the containment step ---
+of the incident-response playbooks.
+\end{enumerate}
+
+\subsection{Two paths, two latencies}
+
+The architecture has exactly two detection paths and their latencies differ by an
+order of magnitude:
+
+\begin{description}
+\item[Stream path.] Ground-segment observations (authentication, telecommands,
+frame integrity, telemetry samples) reach the detection function through the
+stream within seconds. Its bound is the consumer's batching window.
+\item[Control-plane path.] Cloud API calls reach the same function through the
+audit trail and the event bus. Its bound is trail delivery, which is minutes, not
+seconds.
+\end{description}
+
+We model these as a per-rule \emph{tier} (\texttt{stream} or \texttt{batch}) with
+a configurable latency added to every alert timestamp. Reporting a detection
+latency that excludes pipeline delay would flatter the architecture; making the
+delay an explicit, swept parameter (\S\ref{sec:results}) makes the claim honest
+and lets a reader substitute latencies measured in their own account.
+
+\subsection{Normalized event schema}
+
+Every layer emits the same record: timestamp, source, event type, actor, target,
+outcome, source address, and a rule-specific attribute map. The schema is a small
+subset of the common event models used in practice --- enough to write portable
+detections, small enough that its data dictionary fits on a page.
+
+Each event additionally carries a ground-truth label (\texttt{benign} or an attack
+identifier). The label is written by the scenario, never read by a rule --- a
+property enforced by a test that fails if the string appears anywhere in the rule
+module --- and used only for scoring.
+
+\subsection{Deployment}
+
+The cloud instantiation is Terraform for a stream, an encrypted archive with
+lifecycle transitions, an audit trail with object-level data events on the
+archive, two functions, an event bus, findings aggregation, and least-privilege
+roles in which the detector can observe but not act and the responder can act
+only through a narrow set of reversible containment operations. The detection
+function imports the same rule package the experiments run, shipped as a layer:
+a single implementation is what allows results measured offline to be claimed for
+the deployed system.
+
+\subsection{Automated response, deliberately constrained}
+
+Only containment is automated, and only with reversible actions. A ground segment
+controls a vehicle that cannot be taken offline for maintenance; an automated
+action that safes a spacecraft in response to a false positive causes a real
+mission outage, and the response becomes the incident. The most aggressive action
+the automation can take is to stop the \emph{ground segment} from transmitting.
+Nothing in the response path commands the spacecraft.

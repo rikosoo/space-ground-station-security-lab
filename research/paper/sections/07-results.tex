@@ -1,0 +1,275 @@
+\section{Results}
+\label{sec:results}
+
+\subsection{RQ1 --- detection and latency}
+
+All five attacks were detected in all \ResTrials{} trials
+(Table~\ref{tab:baseline}). Mean time to detect across the campaign is
+\ResTTDMean{}\,s.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Per-attack detection performance over \ResTrials{} trials. TTD and TTC
+are measured from the first malicious action and include pipeline latency.
+``Actions that succeeded'' counts adversary actions that took effect, whether or
+not they were detected.}
+\label{tab:baseline}
+\begin{tabular}{@{}lrrrrrlr@{}}
+\toprule
+Attack & Det.\ (\%) & Mean TTD (s) & 95\,\% CI & Median TTD (s) & Mean TTC (s) &
+First rule & Actions succeeded \\
+\midrule
+\input{generated/tab-baseline}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+The striking feature is not the latency but its \emph{variance}, or rather the
+absence of it: four of the five attacks show a confidence interval of zero across
+ten trials with randomised start times. Latency here is a property of the
+architecture, not of the adversary, and it decomposes cleanly into two terms.
+
+The first term is the pipeline. A2, A3 and A4 are detected in
+\ResTTDAtwo{}\,s, \ResTTDAthree{}\,s and \ResTTDAfour{}\,s respectively ---
+essentially the stream-path latency itself --- because their first malicious
+action is already sufficient evidence: a session from an unprofiled origin, a
+frame that failed its tag, a duplicated frame counter. Nothing needs to
+accumulate.
+
+The second term is the rule's own threshold, and it dominates whenever evidence
+must accumulate. A1 is detected at \ResTTDAone{}\,s not because the pipeline is
+slow but because R01 waits for five failed authentications, and the adversary
+sprays one every eleven seconds. A5 is detected at \ResTTDAfive{}\,s because R09
+waits for twenty-five distinct objects at one every four seconds. In both cases
+the SOC could halve the latency by halving the threshold, and would pay for it in
+noise --- which is precisely the trade the sensitivity analysis below quantifies.
+
+\subsection{RQ2 --- false positives}
+
+Across the measurement windows the pack produced
+\ResFPDay{}~$\pm$~\ResFPDayCI{} false positives per day at \ResPrecision{}\,\%
+precision (Table~\ref{tab:rules}). For a single spacecraft that is between three
+and four alerts per week an analyst will close as benign. Whether this is
+acceptable is not a question about precision in the abstract: it is a question
+about whether a team that already runs passes can absorb one extra triage per
+weekday, and at this rate it plainly can.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Per-rule alert quality, summed over all trials. Policy rules produce no
+false positives at all; every false positive in the pack comes from a
+thresholded or behavioural rule.}
+\label{tab:rules}
+\begin{tabular}{@{}llrrrr@{}}
+\toprule
+ID & Rule & TP & FP & Prec.\ (\%) & FP/day \\
+\midrule
+\input{generated/tab-rules}
+\bottomrule
+\end{tabular}
+\end{table}
+
+The distribution matters more than the total. Policy rules --- a command outside
+an allowlist, a frame the vehicle refused, an audit trail stopped --- produced no
+false positives whatsoever, because in a correctly configured ground segment
+nominal operations genuinely never generate those events. All false positives came
+from the thresholded and behavioural rules, and they came from precisely the
+benign anomalies the workload was built to contain: an operator whose typos
+crossed the brute-force threshold, and the weekly reprocessing job, whose access
+pattern R09 cannot distinguish from exfiltration on volume alone.
+
+One rule never fired at all. R10, the archive volume anomaly, produced neither
+true nor false positives: in benign traffic no principal exceeded four standard
+deviations of its own hourly baseline, and during A5 the enumeration rule and the
+automated containment both acted well before the first hourly bucket closed. We
+report this rather than quietly dropping the rule. It is redundant \emph{in this
+configuration}, and it would stop being redundant against an adversary who reads
+a small number of very large objects --- exactly the case an object-count
+threshold cannot see. A rule that never fires is either dead content or an
+uncollected insurance premium, and distinguishing the two requires saying which
+attack it is for.
+
+R07's remaining false positives are the most interesting result in this table,
+because the attack causes them. Once A3 disables frame authentication, every
+subsequent frame arrives unauthenticated, and the ground segment loses its
+ability to tell link corruption from injection. The physics rule --- now the only
+detection left --- therefore inherits the radio's noise and starts alerting on
+naturally corrupted frames. Disabling frame authentication does not merely remove
+a detection; it degrades the precision of the detection that replaces it. We
+report this rather than suppressing it, because a reader deploying content
+analytics as a fallback for cryptographic integrity should know that the fallback
+is noisier precisely when it is needed.
+
+The reprocessing-job case deserves a direct statement rather than a footnote. The correct
+remedy is to exclude the reprocessing principal by identity and alert instead when
+\emph{that} principal reads from an unexpected origin. Raising the threshold
+until the job stops alerting --- the tempting fix --- would also raise it past the
+attack, which is how detections quietly stop working.
+
+\subsection{RQ3 --- which logs identify each attack}
+
+Table~\ref{tab:evidence} maps each attack to the log source that carried its
+first evidence. No attack was visible in only one source, but the sources are not
+interchangeable: three of the five were first identified by ground-segment logs
+that no cloud-native service produces by default. A deployment that instruments
+only the cloud control plane would have detected A1 and A5, would have detected
+A3 only at its second phase, and would have missed A2's radio variant and A4
+entirely.
+
+\begin{table}[t]
+\centering
+\small
+\caption{First evidence by log source. Sources marked \emph{ground} are produced
+by the ground segment itself and must be shipped deliberately.}
+\label{tab:evidence}
+\begin{tabular}{@{}lll@{}}
+\toprule
+Attack & First evidence & Origin \\
+\midrule
+A1 & \texttt{api.auth} failures + success & ground \\
+A2 & \texttt{api.auth} session origin, then \texttt{gs.uplink} & ground \\
+A3 & \texttt{gs.downlink} integrity failures & ground \\
+A4 & \texttt{gs.uplink} replay rejection & ground \\
+A5 & \texttt{cloud.data} object reads & cloud \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RQ4 --- which defence did the work}
+
+Table~\ref{tab:ablation} repeats the campaign with one control removed at a time.
+Detection rate is not the interesting column: every configuration still detects
+every attack, which is the defence-in-depth property the pack was designed for.
+Impact is the interesting column.
+
+\begin{table*}[t]
+\centering
+\small
+\caption{Defence ablation, \ResTrials{} trials per configuration. Detection
+survives every single-control removal; impact does not.}
+\label{tab:ablation}
+\begin{tabular}{@{}lrrrrr@{}}
+\toprule
+Configuration & Det.\ (\%) & Mean TTD (s) & Actions succeeded &
+Critical cmds executed & MB exfiltrated \\
+\midrule
+\input{generated/tab-ablation}
+\bottomrule
+\end{tabular}
+\end{table*}
+
+Three results stand out.
+
+\paragraph{Frame authentication and the anti-replay window are the only controls
+that protect the vehicle.} With the full stack, \AblFullCrit{} critical commands
+reach the spacecraft on average --- these are A3's \texttt{TLM\_AUTH\_DISABLE},
+issued through a hijacked flight-director session and therefore inside the
+allowlist, which is exactly the case an entitlement check cannot catch. Removing
+frame authentication raises the figure to \AblNoSDLSCrit{}; removing the
+anti-replay window raises it to \AblNoReplayCrit{}. Nothing in the cloud analytics tier substitutes for either.
+Detection still fires --- promptly --- but the command has already executed on a
+physical vehicle when it does. This is the clearest instance in our data of the
+general principle that on a system with a physical actuator, detection is not a
+substitute for prevention.
+
+\paragraph{Automated containment prevents most of the impact.} Disabling it
+raises total successful malicious actions from \AblFullSucc{} to
+\AblNoResponseSucc{} and exfiltrated volume from \AblFullMB{}\,MB to
+\AblNoResponseMB{}\,MB, with identical detection latency. The alerts were the
+same; the difference is entirely in whether anything acted on them within
+\SI{20}{\second}.
+
+\paragraph{Some controls cost nothing and are worth having anyway.} Removing the
+rate limit or the pass-window feasibility check changed no outcome in our
+scenarios. We report this rather than omitting it: their value in this testbed
+is that they force an adversary into behaviour that is easier to detect, not that
+they block anything on their own.
+
+\subsection{Sensitivity of the tuning parameters}
+
+Table~\ref{tab:sweep-integrity} shows the frame-integrity threshold trade-off
+directly. At a threshold of one the rule detects tampering
+\SweepIntegOneTTD{}\,s on average but produces \SweepIntegOneFP{} false
+positives per day; at three it detects at \SweepIntegThreeTTD{}\,s with
+\SweepIntegThreeFP{} per day. Buying roughly a minute of latency in exchange for
+a rule an analyst will not mute is, in our judgement, the right trade --- but it
+is a judgement, and the table is what makes it a judgement rather than a guess.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Frame-integrity threshold: latency against noise.}
+\label{tab:sweep-integrity}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Threshold & Mean TTD (s) & Det.\ (\%) & FP/day & Prec.\ (\%) \\
+\midrule
+\input{generated/tab-sweep-integrity-threshold}
+\bottomrule
+\end{tabular}
+\end{table}
+
+The batch-tier latency sweep is starker still: moving from a
+\SI{30}{\second} to a \SI{900}{\second} query cadence moves campaign mean TTD from
+\SweepBatchFastTTD{}\,s to \SweepBatchSlowTTD{}\,s while
+changing the false-positive rate not at all. Query cadence is free latency ---
+the most consequential and most easily overlooked parameter in the architecture.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Batch-tier query cadence. Latency is bought with money, not with noise.}
+\label{tab:sweep-batch}
+\begin{tabular}{@{}rrrrr@{}}
+\toprule
+Latency (s) & Mean TTD (s) & Det.\ (\%) & FP/day & Prec.\ (\%) \\
+\midrule
+\input{generated/tab-sweep-batch-latency-s}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{RQ5 --- cost}
+
+Table~\ref{tab:cost} gives the modelled monthly bill for the measured workload:
+approximately USD~\CostMonthly{} for one spacecraft and one ground station, of
+which \CostTopShare{}\,\% is \CostTopService{}.
+
+\begin{table}[t]
+\centering
+\small
+\caption{Modelled monthly cost, single spacecraft, on-demand list prices, no
+committed-use discounts. Lines below USD~0.01 omitted.}
+\label{tab:cost}
+\begin{tabular}{@{}llr@{}}
+\toprule
+Service & Cost driver & USD/month \\
+\midrule
+\input{generated/tab-cost}
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Cost scaling. The architecture is a fixed platform cost at small scale.}
+\label{tab:cost-scaling}
+\begin{tabular}{@{}rrrr@{}}
+\toprule
+Spacecraft & Events/day & USD/month & USD/spacecraft \\
+\midrule
+\input{generated/tab-cost-scaling}
+\bottomrule
+\end{tabular}
+\end{table}
+
+The scaling behaviour (Table~\ref{tab:cost-scaling}) is the practically important
+result: per-spacecraft cost falls to USD~\CostPerHundred{} at a hundred vehicles.
+At lab scale the bill is dominated by the minimum billable capacity of the search
+tier rather than by event volume --- the architecture is not expensive because it
+processes much, but because it must exist at all. For a single-satellite academic
+or startup mission this is the dominant economic fact, and it argues for pooling
+the analytics tier across missions rather than for reducing telemetry.

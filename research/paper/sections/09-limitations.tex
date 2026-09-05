@@ -1,0 +1,67 @@
+\section{Limitations and threats to validity}
+\label{sec:limitations}
+
+\subsection{Construct validity}
+
+The most significant limitation is that the offline harness \emph{models}
+pipeline latency rather than measuring it in a live cloud account. Our
+stream-path figure of \SI{4}{\second} and batch-path figure of \SI{150}{\second}
+are plausible for the services in question but they are parameters, not
+observations. We mitigate this in three ways: the parameters are named rather
+than buried; the sensitivity analysis reports results across a wide range of
+them; and the deployed functions import the identical rule package, so a reader
+with an account can substitute measured latencies without changing the detection
+logic. Absolute latencies should nonetheless be read as \emph{lower bounds
+conditioned on the modelled pipeline}, and the relative comparisons --- stream
+against batch, threshold against threshold --- are the durable results.
+
+The impact measure is coarse. Counting ``actions that succeeded'' treats an
+executed thruster firing and a read object as one unit each, which is why we
+report critical commands and exfiltrated volume separately. A severity-weighted
+composite would be more informative and would also be more arbitrary; we chose
+transparency.
+
+\subsection{Internal validity}
+
+Ground-truth labels are written by the attack scenarios themselves, so an error
+in a scenario would produce a systematically wrong score. We guard against the
+most dangerous form of this --- a rule reading the label it is being scored
+against --- with a test that fails if the label appears anywhere in the rule
+module. Attribution by evidence causality rather than by time window removes the
+other common failure, in which unrelated benign alerts during an attack window
+are counted as detections.
+
+Attacks are separated by at least \SI{20}{\hour} so that alerts attribute
+cleanly. Real intrusions overlap, and a campaign of simultaneous attacks would
+stress deduplication and analyst triage in ways this design does not measure.
+
+\subsection{External validity}
+
+The benign workload is synthetic. Its noise sources are realistic in kind ---
+typos, roaming operators, link fades, a weekly bulk job --- but their rates are
+chosen. The false-positive figures should therefore be read as
+\emph{order-of-magnitude} results conditioned on that workload, not as a
+prediction for a specific mission. A team adopting this pack should expect to
+re-tune thresholds against their own traffic; the sweep tables show how much
+movement each threshold buys.
+
+The configuration is one spacecraft, one ground station, one cloud account.
+Multi-tenant ground-station-as-a-service, cross-mission analytics, and
+constellation-scale operations each introduce isolation and correlation questions
+this study does not address.
+
+The spacecraft model is deliberately shallow: circular two-body propagation, no
+perturbations, no manoeuvre dynamics, no link budget in decibels. This is
+sufficient because the detections depend on pass timing, physical envelopes and
+frame outcomes, all of which the model reproduces --- but it means the testbed
+cannot be used to study attacks whose detection depends on finer physics, such as
+subtle orbit-determination manipulation.
+
+\subsection{What we did not evaluate}
+
+Availability attacks (jamming, uplink flooding) are excluded because they are
+detected by link metrics rather than security telemetry. Supply-chain compromise
+of flight software, physical attacks on the ground station, and adversaries who
+obtain the SDLS key are excluded by the threat model. Analyst experience --- the
+question of whether \ResFPDay{} false positives per day is actually tolerable in
+a given SOC --- is a human-factors question our method cannot answer.

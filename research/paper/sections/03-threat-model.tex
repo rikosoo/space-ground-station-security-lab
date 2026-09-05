@@ -1,0 +1,63 @@
+\section{Threat model}
+
+\subsection{System under consideration}
+
+A single spacecraft in a \SI{550}{\kilo\metre}, \SI{53}{\degree}-inclination
+orbit (period \SI{95.7}{\minute}, eclipse fraction \num{0.37}), operated through
+one ground station at \SI{-23.55}{\degree} latitude with a
+\SI{10}{\degree} mask angle. This geometry yields three passes per day averaging
+\SI{437}{\second} each. Mission control, the telemetry archive and all security
+analytics run in one cloud account.
+
+\subsection{Assets}
+
+\begin{itemize}
+\item \textbf{Telecommand authority.} Direct control of a physical vehicle;
+worst case is loss of the spacecraft.
+\item \textbf{Frame authentication keys.} Possession allows indefinite forgery
+that no tag check can detect.
+\item \textbf{Telemetry integrity.} The danger is not the falsified number but
+the operator decision taken because of it.
+\item \textbf{The telemetry archive.} Payload products, orbit determination and
+mission intelligence.
+\item \textbf{The audit trail.} Cover for everything above.
+\end{itemize}
+
+\subsection{Adversary capability levels}
+
+Each scenario declares which level it assumes, so that results are not
+implicitly claimed against a stronger or weaker adversary than the one executed.
+
+\begin{description}
+\item[N1 --- remote, credentialed.] Phishing, credential stuffing, relay of a
+second factor. No radio capability. Covers A1, A5 and the API portion of A2.
+\item[N2 --- radio-capable.] Can receive and transmit on the mission's bands and
+knows the frame format. Cannot break HMAC-SHA256. Covers A4 and the RF portion
+of A2.
+\item[N3 --- ground-segment foothold.] Controls a host between the demodulator
+and cloud ingestion. Covers A3.
+\end{description}
+
+Out of scope by assumption: an adversary who obtains the SDLS key, breaks the
+cryptography, or compromises the cloud provider's control plane. Each defeats the
+architecture by definition and would make the measurement uninformative rather
+than pessimistic. Also out of scope: jamming and other availability attacks,
+which are detected by link metrics rather than security telemetry, and whose
+inclusion would confound the false-positive measurement.
+
+\subsection{Assumptions}
+
+\begin{enumerate}
+\item Frame authentication keys are generated in, and never leave, a managed key
+store.
+\item The vehicle enforces its anti-replay window; the ground segment cannot
+persuade it to accept a stale frame.
+\item Telemetry is archived before it is analysed, so detection never depends on
+the analytics tier being available in real time.
+\item The detection pipeline is itself monitored. A silent pipeline is treated as
+an outage, not as a quiet week --- an alarm on consumer lag is part of the
+architecture, not an operational nicety.
+\item The operator population is small and enumerable. This is what makes
+network-origin profiling substantially more effective in a ground segment than
+in a general enterprise.
+\end{enumerate}

@@ -1,0 +1,41 @@
+title: Telemetry inconsistent with subsystem physics
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a07
+status: experimental
+description: >
+  A telemetry channel left its physical envelope, changed faster than the
+  subsystem can change, or stopped changing at all while off its rail. This is
+  the only detection that still works once frame authentication has been
+  disabled on the link, because it reasons about the content of the measurement
+  rather than about its provenance.
+references:
+  - https://sparta.aerospace.org/technique/IMP-0002
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.impact
+  - attack.t1565.002
+  - sparta.imp-0002
+logsource:
+  product: spacecraft
+  service: sat.telemetry
+detection:
+  out_of_envelope:
+    event_type: telemetry.sample
+    '%channel%': '%outside(min, max)%'
+  rate_violation:
+    event_type: telemetry.sample
+    '%d(channel)/dt%': '%above(max_rate)%'
+  stuck_channel:
+    event_type: telemetry.sample
+    '%channel%': '%constant_over(12 samples) and not at_rail%'
+  condition: out_of_envelope or rate_violation or stuck_channel
+falsepositives:
+  - A channel resting at a physical rail (full battery in sunlight, saturated
+    reaction wheel); the rail exclusion in the condition is mandatory
+  - Genuine subsystem faults, which must be triaged as safety events even when
+    they are not security events
+level: high
+fields:
+  - actor
+  - attrs.seq
+  - '%violating channel and value%'

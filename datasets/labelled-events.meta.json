@@ -1,0 +1,135 @@
+{
+  "file": "labelled-events.jsonl",
+  "events": 10349,
+  "seed": 1000,
+  "warmup_days": 7.0,
+  "measure_days": 7.0,
+  "labels": [
+    "A1",
+    "A2",
+    "A3",
+    "A4",
+    "A5",
+    "benign"
+  ],
+  "schema": "see src/spacelab/events.py",
+  "outcomes": {
+    "A1": {
+      "attack_id": "A1",
+      "name": "Credential compromise of a mission operator account",
+      "t0": 1767888359.5640519,
+      "detected": true,
+      "ttd_s": 48.0,
+      "detecting_rules": [
+        "R01"
+      ],
+      "all_rules": [
+        "R01"
+      ],
+      "contained": true,
+      "ttc_s": 68.0,
+      "containment_action": "revoke_sessions_and_block_principal",
+      "malicious_attempts": 0,
+      "malicious_successes": 0,
+      "critical_commands_executed": 0,
+      "bytes_exfiltrated": 0,
+      "successes_after_containment": 0,
+      "alerts": 1
+    },
+    "A2": {
+      "attack_id": "A2",
+      "name": "Unauthorized telecommand against the spacecraft bus",
+      "t0": 1767974460.4665716,
+      "detected": true,
+      "ttd_s": 4.0,
+      "detecting_rules": [
+        "R02"
+      ],
+      "all_rules": [
+        "R02",
+        "R03",
+        "R04",
+        "R05"
+      ],
+      "contained": true,
+      "ttc_s": 44.0,
+      "containment_action": "block_principal",
+      "malicious_attempts": 6,
+      "malicious_successes": 0,
+      "critical_commands_executed": 0,
+      "bytes_exfiltrated": 0,
+      "successes_after_containment": 0,
+      "alerts": 6
+    },
+    "A3": {
+      "attack_id": "A3",
+      "name": "False data injection into the telemetry stream",
+      "t0": 1768016920.4376223,
+      "detected": true,
+      "ttd_s": 14.0,
+      "detecting_rules": [
+        "R06"
+      ],
+      "all_rules": [
+        "R02",
+        "R06",
+        "R07",
+        "R11"
+      ],
+      "contained": true,
+      "ttc_s": 34.0,
+      "containment_action": "quarantine_uplink_path",
+      "malicious_attempts": 28,
+      "malicious_successes": 28,
+      "critical_commands_executed": 1,
+      "bytes_exfiltrated": 0,
+      "successes_after_containment": 22,
+      "alerts": 4
+    },
+    "A4": {
+      "attack_id": "A4",
+      "name": "Replay of a captured authenticated telecommand",
+      "t0": 1768146681.6869998,
+      "detected": true,
+      "ttd_s": 4.0,
+      "detecting_rules": [
+        "R08"
+      ],
+      "all_rules": [
+        "R08"
+      ],
+      "contained": true,
+      "ttc_s": 24.0,
+      "containment_action": "quarantine_uplink_path",
+      "malicious_attempts": 3,
+      "malicious_successes": 0,
+      "critical_commands_executed": 0,
+      "bytes_exfiltrated": 0,
+      "successes_after_containment": 0,
+      "alerts": 2
+    },
+    "A5": {
+      "attack_id": "A5",
+      "name": "Bulk exfiltration of archived mission telemetry",
+      "t0": 1768142298.6138704,
+      "detected": true,
+      "ttd_s": 246.0,
+      "detecting_rules": [
+        "R09"
+      ],
+      "all_rules": [
+        "R09",
+        "R11"
+      ],
+      "contained": true,
+      "ttc_s": 266.0,
+      "containment_action": "deny_archive_access",
+      "malicious_attempts": 260,
+      "malicious_successes": 25,
+      "critical_commands_executed": 0,
+      "bytes_exfiltrated": 1258291200,
+      "successes_after_containment": 0,
+      "alerts": 2
+    }
+  }
+}

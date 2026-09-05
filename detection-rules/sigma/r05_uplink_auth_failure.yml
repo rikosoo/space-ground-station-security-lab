@@ -1,0 +1,37 @@
+title: Telecommand rejected by the spacecraft authentication check
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a05
+status: stable
+description: >
+  The spacecraft refused an uplinked frame because its SDLS authentication tag
+  did not verify, or because the command is not in the flight software's
+  catalogue. Nominal operations never produce this: the ground system signs
+  every frame with the same key the vehicle holds. A rejection therefore means
+  a frame reached the antenna that the mission-control system did not sign.
+references:
+  - https://sparta.aerospace.org/technique/IA-0008
+  - https://public.ccsds.org/Pubs/355x0b1.pdf
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.initial_access
+  - sparta.ia-0008
+  - sparta.ex-0016
+logsource:
+  product: ground_station
+  service: gs.uplink
+detection:
+  selection:
+    event_type: uplink.transmit
+    attrs.reason:
+      - auth_tag_invalid
+      - unknown_command
+  condition: selection
+falsepositives:
+  - Key rollover performed on the ground before the vehicle accepted the new key
+level: critical
+fields:
+  - target
+  - actor
+  - attrs.command
+  - attrs.seq
+  - attrs.site

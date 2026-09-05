@@ -1,0 +1,99 @@
+\section{Discussion}
+
+\subsection{Answering the research question}
+
+Cloud-native security telemetry does detect all five attack classes, quickly and
+at a false-positive rate a small team can absorb --- but the qualifier matters
+more than the headline. Three of the five attacks were first identified by logs
+the \emph{ground segment} produces, not by anything a cloud provider generates on
+its own. The cloud tier supplied the pipeline, the correlation, the findings
+store and the response automation; it did not supply the evidence. An
+organisation that adopts cloud-native security tooling and instruments only what
+that tooling emits by default will detect credential abuse and data
+exfiltration, and will be blind to the attacks that reach the vehicle.
+
+The honest form of the answer is therefore conditional: cloud-native security
+telemetry is effective for ground segments \emph{if the ground segment is
+instrumented as a first-class log source}. That conclusion is unglamorous and, in
+our view, the most useful thing this study produces.
+
+\subsection{Detection is not a substitute for prevention}
+
+The ablation makes this concrete in a way that a narrative argument cannot.
+Removing frame authentication does not reduce the detection rate at all --- every
+forged command is still detected, promptly --- yet it raises the number of
+critical commands executing on the spacecraft from \AblFullCrit{} to
+\AblNoSDLSCrit{}. A perfect detector and a \SI{4}{\second} pipeline do not undo a
+thruster firing.
+
+This is a general property of systems with physical actuators, and it argues for
+a specific division of labour. Preventive controls belong as close to the
+actuator as possible --- on the vehicle, where the anti-replay window lives, not
+in the analytics tier. Detection exists to catch what prevention does not cover
+and to bound the duration of an intrusion, not to replace it. In a ground segment
+the distinction is unusually sharp, because the window in which prevention can
+act is the pass, and the pass is over in seven minutes.
+
+\subsection{Cryptographic integrity and content analytics are complementary}
+
+Attack A3 was designed to separate two defences that are often treated as
+alternatives. Its first phase injects implausible values with a forged tag: the
+cryptographic check catches it immediately. Its second phase first disables frame
+authentication and then freezes a degrading measurement at a plausible constant.
+After that point the tag check has nothing to say --- every frame is
+``correctly'' unauthenticated --- and the only detection left is the one that
+reasons about whether the measurement makes physical sense.
+
+The measurement adds a wrinkle we did not anticipate. Once authentication is
+off, the physics rule also inherits the link's own noise, because the ground
+segment can no longer separate a corrupted frame from an injected one. The
+fallback detection is therefore least precise exactly when it becomes the only
+one --- a property worth knowing before treating content analytics as a
+substitute for provenance.
+
+Neither defence subsumes the other. Cryptography establishes provenance and says
+nothing about content; physics analytics evaluates content and says nothing about
+provenance. A ground segment that has only one of them has a documented blind
+spot, and A3 traverses it in two moves.
+
+\subsection{Where the false positives came from}
+
+Every false positive in the campaign came from a thresholded or behavioural rule,
+and each traced to a benign anomaly that a real ground segment produces every
+week. This has a practical implication for anyone building such a pack: the
+policy rules --- refused commands, refused frames, stopped audit trails --- are
+close to free, and should be written first. They are precise because the events
+they match genuinely do not occur in nominal operations, and that property comes
+from the ground segment's small, well-defined operational envelope rather than
+from clever rule authoring.
+
+The behavioural rules earn their noise, though. R02, the unprofiled-origin rule,
+was the first detector for two of the five attacks. In a general enterprise,
+origin profiling is a notoriously noisy control; in a ground segment, where the
+operator population is a handful of named people working from a handful of known
+networks, it is one of the strongest signals available. Threat detection content
+does not transfer between domains unchanged, and this is a case where the domain
+makes a weak enterprise rule into a strong one.
+
+\subsection{Implications for practitioners}
+
+\begin{enumerate}
+\item \textbf{Ship ground-segment logs.} Authentication, telecommand submission,
+uplink verdicts and frame integrity are the evidence for three of five attacks.
+Nothing generates them for you.
+\item \textbf{Put the anti-replay window on the vehicle and verify it.} It is the
+only control in the study that both prevents an attack and produces its alert.
+\item \textbf{Choose your query cadence deliberately.} Moving batch-tier latency
+from \SI{900}{\second} to \SI{30}{\second} improved campaign mean latency by more
+than any rule change we made, at no cost in false positives.
+\item \textbf{Exclude known-good service principals by identity, never by
+threshold.} The weekly reprocessing job and the exfiltration attack are
+indistinguishable on volume; raising the threshold past the job also raises it
+past the attack.
+\item \textbf{Automate containment, not remediation.} Containment cut impact by
+roughly four fifths in our data. Automating anything that commands the vehicle
+would make a false positive into a mission outage.
+\item \textbf{Budget for the platform, not the volume.} At single-mission scale
+the cost is a floor, not a function of telemetry. Pool the analytics tier across
+missions rather than reducing what you collect.
+\end{enumerate}

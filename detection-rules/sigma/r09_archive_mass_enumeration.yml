@@ -1,0 +1,37 @@
+title: Bulk enumeration of the telemetry archive
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a09
+status: stable
+description: >
+  A single principal read more than twenty-five distinct objects from the
+  telemetry archive within ten minutes. Interactive analysis touches a handful
+  of products; this pattern is a copy.
+references:
+  - https://sparta.aerospace.org/technique/EXF-0008
+  - https://attack.mitre.org/techniques/T1530/
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.collection
+  - attack.t1530
+  - sparta.exf-0008
+logsource:
+  product: aws
+  service: cloudtrail
+  category: data_event
+detection:
+  selection:
+    eventName: GetObject
+    eventSource: s3.amazonaws.com
+    requestParameters.bucketName: '%telemetry_archive%'
+    errorCode: null
+  timeframe: 10m
+  condition: selection | count_distinct(requestParameters.key) by userIdentity.arn >= 25
+falsepositives:
+  - Scheduled reprocessing or backfill jobs; exclude their service principals by
+    ARN rather than by IP, and alert if such a principal reads from a new origin
+level: high
+fields:
+  - userIdentity.arn
+  - sourceIPAddress
+  - userAgent
+  - requestParameters.bucketName

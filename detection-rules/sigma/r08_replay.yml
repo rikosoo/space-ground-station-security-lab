@@ -1,0 +1,39 @@
+title: Replayed telecommand frame
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a08
+status: stable
+description: >
+  A frame counter already accepted for this spacecraft was seen again, or the
+  vehicle's anti-replay window rejected a frame, or a downlinked frame arrived
+  with a timestamp far older than its reception time. A correctly authenticated
+  frame that is not fresh is the signature of a recorded-and-retransmitted
+  telecommand.
+references:
+  - https://sparta.aerospace.org/technique/EX-0013
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.impact
+  - attack.t1499
+  - sparta.ex-0013
+logsource:
+  product: ground_station
+  service: gs.uplink
+detection:
+  rejected_by_vehicle:
+    event_type: uplink.transmit
+    attrs.reason: replay_window_reject
+  duplicate_counter:
+    event_type: uplink.transmit
+    attrs.seq: '%seen_before(target, attrs.seq)%'
+  stale_frame:
+    event_type: downlink.frame
+    attrs.latency_s|gt: 60
+  condition: rejected_by_vehicle or duplicate_counter or stale_frame
+falsepositives:
+  - Frame counter reset after a spacecraft reboot without a matching ground reset
+level: critical
+fields:
+  - target
+  - attrs.seq
+  - attrs.reason
+  - attrs.latency_s

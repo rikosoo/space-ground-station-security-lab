@@ -1,0 +1,38 @@
+title: Successful logon from unprofiled network origin
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a02
+status: stable
+description: >
+  A mission-control session is established from an autonomous system or with a
+  client fingerprint never seen for that account during the baseline window.
+  Ground-segment operators work from a small number of known networks, which
+  makes origin a far stronger signal here than in a general enterprise.
+references:
+  - https://sparta.aerospace.org/technique/IA-0004
+  - https://attack.mitre.org/techniques/T1078/
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.initial_access
+  - attack.t1078
+  - sparta.ia-0004
+logsource:
+  product: mission_control
+  service: api.auth
+detection:
+  selection:
+    event_type: auth.login
+    outcome: success
+  filter_known:
+    attrs.asn: '%baseline_asns(actor)%'
+    attrs.user_agent: '%baseline_agents(actor)%'
+  condition: selection and not filter_known
+falsepositives:
+  - Operator travelling or connecting over a mobile network
+  - New console build changing the client user agent
+level: medium
+fields:
+  - actor
+  - src_ip
+  - attrs.asn
+  - attrs.user_agent
+  - attrs.auth_method

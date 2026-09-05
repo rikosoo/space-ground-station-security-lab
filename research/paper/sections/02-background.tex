@@ -1,0 +1,61 @@
+\section{Background and related work}
+
+\subsection{The space link and its security services}
+
+Telecommand and telemetry in most civil and commercial missions follow the CCSDS
+protocol stack: application data in Space Packets \cite{ccsds133spp}, carried in
+transfer frames, optionally protected by the Space Data Link Security protocol
+(SDLS) \cite{ccsds355sdls}. SDLS provides authentication, optional confidentiality,
+and --- critically for this work --- an anti-replay sequence number bound into the
+authenticated data. Our testbed models SDLS at the level of abstraction the
+detections care about: a keyed authentication tag over the frame payload and
+sequence number, and a sliding acceptance window on the vehicle. It does not
+model bit layouts, which do not change which events reach the analytics tier.
+
+The two properties that matter for detection engineering are worth stating
+plainly. First, a frame that fails its tag check on the vehicle is an
+unambiguous signal: nominal operations never produce one, because the ground
+system signs every frame with the key the vehicle holds. Second, authentication
+alone does not establish freshness --- a recorded frame remains cryptographically
+valid forever --- which is why the anti-replay window, not the tag, is the
+control that defeats replay.
+
+\subsection{Threat knowledge for space systems}
+
+SPARTA \cite{sparta} adapts the ATT\&CK \cite{attack} structure to space systems,
+covering reconnaissance through impact for both the space and ground segments. We
+map every detection rule to a SPARTA technique and, where an analogue exists, to
+an ATT\&CK technique; this makes the coverage claim checkable rather than
+rhetorical. NIST IR 8270 \cite{nistir8270} and SPD-5 \cite{spd5} supply the
+control expectations --- authentication of commands, protection of telemetry
+integrity, monitoring --- that the architecture implements.
+
+\subsection{Prior empirical work}
+
+Pavur and Martinovic \cite{pavur2020launchpad} argue that satellite security
+research is held back by the absence of accessible testbeds, and that the field
+substitutes speculation for measurement as a result. Willbold et al.
+\cite{willbold2023odyssey} answer part of that challenge on the space segment,
+analysing real satellite firmware and finding that several vehicles accept
+unauthenticated commands outright. Manulis et al. \cite{manulis2021newspace}
+survey the New Space threat landscape and identify the ground segment as the
+dominant practical attack surface, a judgement the KA-SAT incident
+\cite{viasat2022} supports.
+
+Our work is complementary and deliberately narrower. We do not analyse flight
+software. We assume the space segment implements its security services correctly
+and ask what the \emph{ground} segment's cloud telemetry sees when an adversary
+attacks the chain around it. To our knowledge this combination --- an end-to-end
+ground-segment testbed, five labelled attack scenarios, and reported detection
+latency, false-positive rate, control attribution and cost --- has not previously
+been published in a form a reader can rerun.
+
+\subsection{Why detection latency is the right metric here}
+
+In enterprise security, dwell time is measured in days and the marginal value of
+shaving seconds is low. A ground segment inverts this. The adversary's window of
+\emph{effect} is the pass: a command that cannot be transmitted cannot harm the
+vehicle. A pass in our configuration lasts about \SI{7}{\minute}. A detection
+that fires in seconds can contain an intrusion before the next pass; one that
+fires in an hour cannot. Latency is therefore not a quality-of-service metric in
+this domain --- it decides whether the response is capable of mattering.

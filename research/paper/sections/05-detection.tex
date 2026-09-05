@@ -1,0 +1,92 @@
+\section{Detection content}
+\label{sec:detection}
+
+Eleven rules cover the five scenarios. They fall into three kinds, and the
+distinction is not cosmetic --- the kinds behave differently under both attack and
+noise.
+
+\begin{description}
+\item[Policy rules] fire on a violation of a control that nominal operations
+never produce: a command refused by an allowlist, a frame refused by the
+vehicle, an audit trail stopped. They are the cheapest and most precise rules in
+the pack and, in our results, the ones that carry most of the detection load.
+\item[Thresholded rules] aggregate an individually noisy signal over a window: a
+burst of failed authentications, a cluster of frame integrity failures, a count
+of distinct objects read. Their threshold trades latency against noise directly.
+\item[Behavioural rules] compare against a profile learned during a warm-up
+window: an unprofiled network origin, a principal issuing its first critical
+command, an hourly read volume far above baseline. They are the only rules that
+can catch an adversary who violates no policy.
+\end{description}
+
+\begin{table}[t]
+\centering
+\small
+\caption{Detection content. Tier determines latency: \texttt{stream} rules see an
+event within seconds, \texttt{batch} rules cannot beat their own aggregation
+window.}
+\label{tab:rules-catalogue}
+\begin{tabular}{@{}llll@{}}
+\toprule
+ID & Kind & Tier & Detects \\
+\midrule
+R01 & thresholded  & stream & A1 \\
+R02 & behavioural  & stream & A1, A2, A3 \\
+R03 & policy       & stream & A2 \\
+R04 & behavioural  & stream & A2 \\
+R05 & policy       & stream & A2, A4 \\
+R06 & thresholded  & stream & A3 \\
+R07 & behavioural  & batch  & A3 \\
+R08 & policy       & stream & A4 \\
+R09 & thresholded  & batch  & A5 \\
+R10 & statistical  & batch  & A5 \\
+R11 & policy       & stream & A3, A5 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Every rule maps to a SPARTA technique \cite{sparta} and, where an analogue
+exists, to ATT\&CK \cite{attack}. No attack depends on a single rule; that is a
+design requirement, and the ablation in \S\ref{sec:results} exists partly to
+check that removing one control does not open a blind spot.
+
+\subsection{Two rules worth describing in detail}
+
+\paragraph{R06, frame integrity, and why it is thresholded.}
+A radio link corrupts frames on its own, particularly at low elevation at the
+edges of a pass. In our model the frame error probability rises exponentially as
+elevation falls, producing roughly six to nine corrupted frames per week out of
+about \num{1800}. A rule that alerts on a \emph{single} failed tag detects
+tampering approximately \SI{60}{\second} sooner and generates enough noise to be
+switched off within a week --- the exact failure mode a detection architecture
+exists to avoid. R06 therefore requires three failures within
+\SI{120}{\second}. \S\ref{sec:results} quantifies both sides of that trade.
+
+\paragraph{R07, physics, and the rail exclusion.}
+R07 checks three things about each telemetry channel: that it lies inside its
+physical envelope, that it is not changing faster than the subsystem can change,
+and that it is not frozen. The third check is what catches a masking attack that
+holds a degrading measurement constant. Its first implementation was the largest
+single source of false positives in the testbed, because a fully charged battery
+in sunlight is legitimately constant. Excluding channels resting against a
+physical rail removed that entire class. The lesson generalises beyond this
+testbed: a stuck-value detector on any physical process must know which constants
+are physics and which are faults.
+
+\paragraph{Analytics should not run on bits already known to be corrupt.}
+R07's second-largest false-positive source was subtler than the rail problem and
+more instructive. A corrupted frame contains implausible values by definition, so
+the physics rule dutifully alerted on link noise that the integrity check had
+\emph{already} rejected --- two rules alarming on one event, one of them
+uselessly. Excluding samples whose frame failed its tag check removed every such
+alert and left a clean division of labour: R06 owns provenance failures, R07 owns
+content. The general form of the lesson is that a detection pipeline should
+establish trust in an input before reasoning about its meaning.
+
+\subsection{Portability}
+
+Each rule exists in two synchronised forms: executable Python, which both the
+experiments and the deployed function import, and Sigma \cite{sigma}, which can
+be converted for another backend. A test asserts that the two sets of rule
+identifiers are equal, so the packs cannot silently drift apart --- a failure mode
+common enough in practice to be worth automating against.

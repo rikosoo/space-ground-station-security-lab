@@ -1,0 +1,80 @@
+\section{Methodology}
+\label{sec:methodology}
+
+\subsection{Protocol}
+
+One trial has two phases:
+
+\begin{enumerate}
+\item \textbf{Warm-up} (\ResWarmupDays{} simulated days). Nominal operations with
+the engine in learning mode. Behavioural rules build their profiles and emit
+nothing.
+\item \textbf{Measurement} (\ResMeasureDays{} simulated days,
+\ResEventsPerWindow{} events). Nominal operations continue while the five attacks
+are injected at staggered start times, separated by \SI{20}{\hour} plus a
+per-trial random jitter of up to \SI{8}{\hour}. The spacing makes every alert
+attributable to at most one attack; the jitter prevents each trial from placing
+attacks at the same point of the orbital cycle, which would report schedule
+artefacts as variance.
+\end{enumerate}
+
+We run \ResTrials{} independent trials with different seeds and report means with
+\SI{95}{\percent} normal-approximation confidence intervals.
+
+\subsection{The benign workload}
+
+A testbed with no benign anomalies reports a false-positive rate of zero and says
+nothing useful. Ours generates four classes of benign noise, chosen because each
+is a real analyst's daily experience: operators mistyping passwords (occasionally
+enough times in a row to resemble a spray); operators connecting from mobile or
+travel networks; the radio link corrupting frames at low elevation; and a
+legitimate weekly reprocessing job that bulk-reads the archive in a pattern
+superficially identical to exfiltration. Their \emph{rates} are chosen, not
+measured from a real mission --- a limitation we return to in
+\S\ref{sec:limitations}.
+
+\subsection{Scoring definitions}
+
+\begin{description}
+\item[True positive.] An alert at least one of whose evidence events carries a
+non-benign ground-truth label. Attribution therefore follows causality, not
+temporal coincidence: an alert that merely fires during an attack window, caused
+by unrelated benign activity, counts as a false positive.
+\item[Time to detect (TTD).] The first attributed alert's actionable timestamp
+minus the attack's first malicious action. It includes the pipeline latency of
+the tier that produced the alert. For the replay scenario the reference point is
+the first re-transmission, not the passive radio capture, because capture leaves
+no observable in the ground segment.
+\item[Time to contain (TTC).] The first automated containment action on the
+attack's entity minus the same reference point.
+\item[Impact.] Malicious actions that took effect --- commands executed, objects
+read, forged frames accepted --- reported both in total and, separately, as
+critical commands executed and megabytes exfiltrated, because ``one executed
+thruster firing'' and ``one object read'' are not comparable harms.
+\item[Impact after containment.] The subset of the above occurring after the
+first containment action: what the response did \emph{not} prevent.
+\end{description}
+
+\subsection{Deduplication as part of the system under test}
+
+Without a per-entity cooldown, a single incident produces an alert storm and the
+false-positive rate becomes meaningless. The cooldown (\SI{300}{\second} by
+default) is therefore an explicit, swept parameter rather than a hidden
+implementation detail.
+
+\subsection{Ablation and sensitivity}
+
+The ablation repeats the whole campaign with one control disabled at a time
+across seven preventive and responsive mechanisms, plus an all-disabled
+configuration. The sensitivity analysis sweeps four tuning parameters --- the
+frame-integrity threshold, the batch-tier latency, the archive enumeration
+threshold and the deduplication cooldown --- one at a time with everything else
+at default.
+
+\subsection{Reproducibility}
+
+Every run is seeded and deterministic; a test asserts that two trials with the
+same seed produce identical latencies and false-positive counts. Fourteen
+simulated days take about two seconds of wall time. Every number in this paper is
+generated from the experiment JSON by a script that emits the LaTeX macros and
+table bodies the document includes, so a stale figure in the text is not possible.

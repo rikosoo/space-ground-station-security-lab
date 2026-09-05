@@ -1,0 +1,34 @@
+title: Archive read volume far above the principal's baseline
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a10
+status: experimental
+description: >
+  Hourly bytes read from the telemetry archive by one principal exceeded its
+  baseline mean by four standard deviations. Complements the object-count rule:
+  it catches a small number of very large reads, which enumeration thresholds
+  miss entirely.
+references:
+  - https://sparta.aerospace.org/technique/EXF-0007
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.exfiltration
+  - sparta.exf-0007
+logsource:
+  product: aws
+  service: cloudtrail
+  category: data_event
+detection:
+  selection:
+    eventName: GetObject
+    eventSource: s3.amazonaws.com
+    requestParameters.bucketName: '%telemetry_archive%'
+  timeframe: 1h
+  condition: selection | sum(additionalEventData.bytesTransferredOut) by userIdentity.arn > mean + 4*stddev
+falsepositives:
+  - The first hour after a new pipeline is onboarded, before it has a baseline
+  - Month-end reporting jobs; these should carry their own baseline
+level: medium
+fields:
+  - userIdentity.arn
+  - sourceIPAddress
+  - additionalEventData.bytesTransferredOut

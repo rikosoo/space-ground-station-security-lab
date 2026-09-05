@@ -1,0 +1,41 @@
+title: Security control disabled or weakened
+id: 6f2c1a30-5b1e-4d54-9a4a-1c0f9b2d0a11
+status: stable
+description: >
+  Audit logging stopped, a bucket policy rewritten, a long-lived access key
+  minted, or frame authentication switched off on the space link. These are the
+  actions an adversary takes to keep working, and each one is individually rare
+  enough in a ground segment to alert on without aggregation.
+references:
+  - https://sparta.aerospace.org/technique/DE-0002
+  - https://attack.mitre.org/techniques/T1562/008/
+author: space-ground-station-security-lab
+date: 2026/01/15
+tags:
+  - attack.defense_evasion
+  - attack.t1562.008
+  - sparta.de-0002
+logsource:
+  product: aws
+  service: cloudtrail
+detection:
+  cloud_actions:
+    eventName:
+      - StopLogging
+      - DeleteTrail
+      - PutBucketPolicy
+      - PutBucketAcl
+      - CreateAccessKey
+      - ScheduleKeyDeletion
+  space_link:
+    event_type: command.submit
+    attrs.command: TLM_AUTH_DISABLE
+  condition: cloud_actions or space_link
+falsepositives:
+  - Planned key rotation or trail migration; suppress by change-ticket window only
+level: critical
+fields:
+  - userIdentity.arn
+  - eventName
+  - sourceIPAddress
+  - requestParameters
