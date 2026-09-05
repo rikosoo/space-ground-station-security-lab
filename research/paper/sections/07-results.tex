@@ -181,6 +181,17 @@ raises total successful malicious actions from \AblFullSucc{} to
 same; the difference is entirely in whether anything acted on them within
 \SI{20}{\second}.
 
+\paragraph{A control can be redundant because another one already covered it.}
+Disabling MFA changed no outcome at all, which is initially surprising for the
+one control that genuinely prevents A1. The explanation is in the timeline:
+R01 fires on the fifth failed authentication and containment revokes the account
+before the adversary's spray reaches the correct password. Detection substituted
+for prevention here --- but only because the adversary was noisy. In the
+all-disabled configuration, where nothing contains the account either, A1 becomes
+the second most productive attack in the campaign. Redundancy between a
+preventive and a detective control is worth having and worth knowing about; it is
+not a reason to remove either.
+
 \paragraph{Some controls cost nothing and are worth having anyway.} Removing the
 rate limit or the pass-window feasibility check changed no outcome in our
 scenarios. We report this rather than omitting it: their value in this testbed

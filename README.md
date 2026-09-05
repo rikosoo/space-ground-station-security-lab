@@ -37,30 +37,33 @@ Regenerate with `python research/experiments/run_experiment.py all`.
 
 | Attack | Detected | Mean time to detect | First rule to fire | What stopped it |
 |---|---|---|---|---|
-| A1 Credential compromise | 10/10 | 48 s | R01 brute force | MFA (prevention) + session revocation |
+| A1 Credential compromise | 10/10 | 48 s | R01 brute force | Detecting the spray and revoking the account, before MFA was even tested |
 | A2 Unauthorized command | 10/10 | 4 s | R02 unprofiled origin | RBAC allowlist; SDLS tag for the RF variant |
 | A3 Telemetry tampering | 10/10 | 14 s | R06 frame integrity | Nothing prevented it; physics analytics caught the stealth phase |
 | A4 Replay | 10/10 | 4 s | R08 replay | Spacecraft anti-replay window |
 | A5 Exfiltration | 10/10 | 243 s | R09 bulk enumeration | Automated archive deny, after ~24 objects |
 
-False positives: **0.30 ± 0.07 per day**, precision **88.5%**. Modelled cost:
+False positives: **0.50 ± 0.12 per day**, precision **81.2%**. Modelled cost:
 **~USD 420/month** for one spacecraft, falling to **~USD 80 per spacecraft** at a
 hundred. Full tables in [`research/results/`](research/results/).
 
 Three findings worth the reader's time:
 
-1. **Latency is set by the architecture, not by the attack.** Every rule on the
-   stream path detects in seconds regardless of what the adversary does; every
-   rule on the batch path is bounded below by its own aggregation window. Moving
-   one rule between tiers changes mean time to detect more than any amount of
-   rule tuning.
+1. **Latency is set by the architecture, not by the attack.** It decomposes into
+   two terms and neither is adversary behaviour: the tier a rule runs in (A2, A3
+   and A4 detect at essentially the stream-path latency itself) and the rule's own
+   threshold where evidence has to accumulate (A1 waits for five failed logons,
+   A5 for twenty-five objects). Four of the five attacks show a confidence
+   interval of zero across ten trials with randomised start times.
 2. **Cryptographic integrity and physics-aware analytics are complementary.**
    Attack A3 disables frame authentication and then falsifies telemetry
    plausibly. After that point the only remaining detection is the one that
    reasons about the measurement itself.
 3. **Detection without prevention is not a result.** A5 is detected in about four
-   minutes, and roughly 24 objects still leave the account before containment.
-   The paper reports what the response failed to prevent, not just what it saw.
+   minutes, and roughly 24 objects (1.2 GB) still leave the account before
+   containment. Turning the automated containment off leaves the detection
+   latency identical and raises the exfiltrated volume to 13 GB. The paper
+   reports what the response failed to prevent, not just what it saw.
 
 ## Repository layout
 
@@ -89,7 +92,7 @@ cd space-ground-station-security-lab
 
 python satellite-simulator/run.py --days 1     # orbit and telemetry sanity check
 python ground-station/run.py --hours 24        # a nominal day, with the alert timeline
-python -m pytest tests -q                      # 17 tests, ~12 s
+python -m pytest tests -q                      # 19 tests, ~14 s
 
 python research/experiments/run_experiment.py all --trials 10
 ```
