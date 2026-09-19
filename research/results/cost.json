@@ -19,21 +19,21 @@
   "lines": [
     {
       "service": "Kinesis Data Streams",
-      "driver": "stream-hours (on-demand)",
+      "driver": "stream-hours",
       "quantity": 720.0,
       "unit": "stream-hour",
       "monthly_usd": 28.8
     },
     {
       "service": "Kinesis Data Streams",
-      "driver": "ingested telemetry + security events",
+      "driver": "ingested events",
       "quantity": 0.02184492857142857,
       "unit": "GB",
       "monthly_usd": 0.0017475942857142857
     },
     {
       "service": "Lambda",
-      "driver": "detection + response invocations",
+      "driver": "detection invocations",
       "quantity": 24272.142857142855,
       "unit": "invocation",
       "monthly_usd": 0.013956500346964286
@@ -54,14 +54,14 @@
     },
     {
       "service": "CloudWatch",
-      "driver": "alarms + custom metrics",
+      "driver": "alarms, metrics",
       "quantity": 65,
       "unit": "resource",
       "monthly_usd": 14.5
     },
     {
       "service": "S3",
-      "driver": "telemetry archive storage",
+      "driver": "archive storage",
       "quantity": 1012.5,
       "unit": "GB-month",
       "monthly_usd": 23.287499999999998
@@ -89,7 +89,7 @@
     },
     {
       "service": "OpenSearch Serverless",
-      "driver": "indexing + search OCUs",
+      "driver": "indexing + search",
       "quantity": 1440.0,
       "unit": "OCU-hour",
       "monthly_usd": 345.59999999999997
@@ -103,14 +103,14 @@
     },
     {
       "service": "GuardDuty",
-      "driver": "CloudTrail + S3 data analysed",
+      "driver": "data analysed",
       "quantity": 0.02184492857142857,
       "unit": "GB",
       "monthly_usd": 0.02184492857142857
     },
     {
       "service": "KMS",
-      "driver": "key + cryptographic requests",
+      "driver": "key + requests",
       "quantity": 2,
       "unit": "key",
       "monthly_usd": 2.0728164285714286

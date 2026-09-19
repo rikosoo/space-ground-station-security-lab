@@ -4,20 +4,20 @@ Derived from the measured workload of 809 security events per day for a single s
 
 | Service | Cost driver | Quantity | Unit | USD/month |
 |---|---|---:|---|---:|
-| OpenSearch Serverless | indexing + search OCUs | 1,440.0 | OCU-hour | 345.60 |
-| Kinesis Data Streams | stream-hours (on-demand) | 720.0 | stream-hour | 28.80 |
-| S3 | telemetry archive storage | 1,012.5 | GB-month | 23.29 |
-| CloudWatch | alarms + custom metrics | 65.0 | resource | 14.50 |
+| OpenSearch Serverless | indexing + search | 1,440.0 | OCU-hour | 345.60 |
+| Kinesis Data Streams | stream-hours | 720.0 | stream-hour | 28.80 |
+| S3 | archive storage | 1,012.5 | GB-month | 23.29 |
+| CloudWatch | alarms, metrics | 65.0 | resource | 14.50 |
 | Security Hub | findings ingested | 90.0 | finding | 5.00 |
-| KMS | key + cryptographic requests | 2.0 | key | 2.07 |
+| KMS | key + requests | 2.0 | key | 2.07 |
 | EventBridge | rule matches | 24,272.1 | event | 0.02 |
-| GuardDuty | CloudTrail + S3 data analysed | 0.0 | GB | 0.02 |
-| Lambda | detection + response invocations | 24,272.1 | invocation | 0.01 |
+| GuardDuty | data analysed | 0.0 | GB | 0.02 |
+| Lambda | detection invocations | 24,272.1 | invocation | 0.01 |
 | S3 | PUT/GET requests | 10,800.0 | request | 0.01 |
 | CloudWatch Logs | log ingestion | 0.0 | GB | 0.01 |
 | CloudTrail | S3 data events | 10,800.0 | event | 0.01 |
 | CloudWatch Logs | log retention | 0.1 | GB-month | 0.00 |
-| Kinesis Data Streams | ingested telemetry + security events | 0.0 | GB | 0.00 |
+| Kinesis Data Streams | ingested events | 0.0 | GB | 0.00 |
 | SNS | analyst notifications | 90.0 | notification | 0.00 |
 | **Total** | | | | **419.36** |
 

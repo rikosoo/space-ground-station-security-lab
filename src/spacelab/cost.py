@@ -124,21 +124,21 @@ def estimate(w: Workload) -> CostReport:
     events_month = w.security_events_per_day * w.days
     gb_events = events_month * w.bytes_per_event / 1e9
 
-    add("Kinesis Data Streams", "stream-hours (on-demand)",
+    add("Kinesis Data Streams", "stream-hours",
         24 * w.days * max(1, w.spacecraft // 25 + 1), "stream-hour",
         24 * w.days * max(1, w.spacecraft // 25 + 1) * p["kinesis_ondemand_stream_hour"])
-    add("Kinesis Data Streams", "ingested telemetry + security events", gb_events, "GB",
+    add("Kinesis Data Streams", "ingested events", gb_events, "GB",
         gb_events * p["kinesis_ondemand_gb_ingested"])
 
     gb_s = (w.lambda_memory_mb / 1024) * (w.lambda_ms_per_event / 1000) * events_month
-    add("Lambda", "detection + response invocations", events_month, "invocation",
+    add("Lambda", "detection invocations", events_month, "invocation",
         events_month / 1e6 * p["lambda_per_million_requests"] + gb_s * p["lambda_gb_second"])
 
     add("CloudWatch Logs", "log ingestion", gb_events, "GB",
         gb_events * p["cloudwatch_logs_gb_ingested"])
     add("CloudWatch Logs", "log retention", gb_events * 3, "GB-month",
         gb_events * 3 * p["cloudwatch_logs_gb_month_stored"])
-    add("CloudWatch", "alarms + custom metrics", w.cloudwatch_alarms + w.custom_metrics,
+    add("CloudWatch", "alarms, metrics", w.cloudwatch_alarms + w.custom_metrics,
         "resource",
         w.cloudwatch_alarms * p["cloudwatch_alarm_month"]
         + w.custom_metrics * p["cloudwatch_custom_metric_month"])
@@ -146,7 +146,7 @@ def estimate(w: Workload) -> CostReport:
     objects_month = w.telemetry_objects_per_day * w.days
     gb_archive = objects_month * w.telemetry_object_mb / 1024
     stored = gb_archive * w.archive_retention_months
-    add("S3", "telemetry archive storage", stored, "GB-month",
+    add("S3", "archive storage", stored, "GB-month",
         stored * p["s3_standard_gb_month"])
     add("S3", "PUT/GET requests", objects_month * 6, "request",
         objects_month / 1000 * p["s3_put_per_1000"]
@@ -156,13 +156,13 @@ def estimate(w: Workload) -> CostReport:
 
     add("EventBridge", "rule matches", events_month, "event",
         events_month / 1e6 * p["eventbridge_per_million_events"])
-    add("OpenSearch Serverless", "indexing + search OCUs", w.opensearch_ocus * 24 * w.days,
+    add("OpenSearch Serverless", "indexing + search", w.opensearch_ocus * 24 * w.days,
         "OCU-hour", w.opensearch_ocus * 24 * w.days * p["opensearch_serverless_ocu_hour"])
     add("Security Hub", "findings ingested", w.findings_per_day * w.days, "finding",
         w.findings_per_day * w.days / 10_000 * p["securityhub_finding_per_10k"] + 5.0)
-    add("GuardDuty", "CloudTrail + S3 data analysed", gb_events, "GB",
+    add("GuardDuty", "data analysed", gb_events, "GB",
         gb_events * p["guardduty_gb_analyzed"])
-    add("KMS", "key + cryptographic requests", 2, "key",
+    add("KMS", "key + requests", 2, "key",
         2 * p["kms_key_month"] + (events_month / 10_000) * p["kms_per_10k_requests"])
     add("SNS", "analyst notifications", w.findings_per_day * w.days, "notification",
         w.findings_per_day * w.days / 1e6 * p["sns_per_million_notifications"])

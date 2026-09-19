@@ -18,7 +18,16 @@ the experiments and rebuilding cannot leave a stale figure in the text. If
 prints a warning.
 
 Requires `latexmk` and a TeX distribution with `booktabs`, `siunitx`, `balance`
-and `hyperref`.
+and `hyperref`. On Debian or Ubuntu:
+`apt-get install latexmk texlive-latex-recommended texlive-latex-extra texlive-science`.
+
+`main.pdf` is committed so the paper can be read without any of that.
+
+`make` passes `-g` to force a rebuild. The table bodies in `generated/` are read
+with the TeX primitive rather than LaTeX's `\input`, because the latter injects a
+`\par` at end of file that breaks the alignment before `\bottomrule` - and the
+primitive is not tracked by latexmk's dependency scan, so without `-g` a
+regenerated table would not reach the PDF.
 
 ## Structure
 

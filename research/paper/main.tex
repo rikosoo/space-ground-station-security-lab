@@ -15,6 +15,13 @@
 \sisetup{group-separator={,}}
 \captionsetup{font=small,labelfont=bf}
 
+% Table bodies are generated files read from inside a tabular. LaTeX's \input
+% injects a \par at end of file, which breaks the alignment before \bottomrule;
+% the TeX primitive does not.
+\makeatletter
+\newcommand{\inputrows}[1]{\@@input #1 }
+\makeatother
+
 % Numbers regenerated from research/results/*.json by make_macros.py.
 \IfFileExists{generated/results.tex}{\input{generated/results.tex}}{%
   \typeout{WARNING: run `make macros` first; using placeholders}%

@@ -20,7 +20,7 @@ not they were detected.}
 Attack & Det.\ (\%) & Mean TTD (s) & 95\,\% CI & Median TTD (s) & Mean TTC (s) &
 First rule & Actions succeeded \\
 \midrule
-\input{generated/tab-baseline}
+\inputrows{generated/tab-baseline.tex}
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -57,16 +57,16 @@ weekday, and at this rate it plainly can.
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Per-rule alert quality, summed over all trials. Policy rules produce no
 false positives at all; every false positive in the pack comes from a
 thresholded or behavioural rule.}
 \label{tab:rules}
 \begin{tabular}{@{}llrrrr@{}}
 \toprule
-ID & Rule & TP & FP & Prec.\ (\%) & FP/day \\
+ID & Rule & TP & FP & Prec. & FP/day \\
 \midrule
-\input{generated/tab-rules}
+\inputrows{generated/tab-rules.tex}
 \bottomrule
 \end{tabular}
 \end{table}
@@ -120,7 +120,7 @@ entirely.
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{First evidence by log source. Sources marked \emph{ground} are produced
 by the ground segment itself and must be shipped deliberately.}
 \label{tab:evidence}
@@ -150,12 +150,11 @@ Impact is the interesting column.
 \caption{Defence ablation, \ResTrials{} trials per configuration. Detection
 survives every single-control removal; impact does not.}
 \label{tab:ablation}
-\begin{tabular}{@{}lrrrrr@{}}
+\begin{tabular}{@{}lrrrrrr@{}}
 \toprule
-Configuration & Det.\ (\%) & Mean TTD (s) & Actions succeeded &
-Critical cmds executed & MB exfiltrated \\
+Configuration & Det.\ (\%) & TTD (s) & Actions & Critical cmds & MB out & FP/day \\
 \midrule
-\input{generated/tab-ablation}
+\inputrows{generated/tab-ablation.tex}
 \bottomrule
 \end{tabular}
 \end{table*}
@@ -210,14 +209,14 @@ is a judgement, and the table is what makes it a judgement rather than a guess.
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Frame-integrity threshold: latency against noise.}
 \label{tab:sweep-integrity}
 \begin{tabular}{@{}rrrrr@{}}
 \toprule
 Threshold & Mean TTD (s) & Det.\ (\%) & FP/day & Prec.\ (\%) \\
 \midrule
-\input{generated/tab-sweep-integrity-threshold}
+\inputrows{generated/tab-sweep-integrity-threshold.tex}
 \bottomrule
 \end{tabular}
 \end{table}
@@ -230,14 +229,14 @@ the most consequential and most easily overlooked parameter in the architecture.
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Batch-tier query cadence. Latency is bought with money, not with noise.}
 \label{tab:sweep-batch}
 \begin{tabular}{@{}rrrrr@{}}
 \toprule
 Latency (s) & Mean TTD (s) & Det.\ (\%) & FP/day & Prec.\ (\%) \\
 \midrule
-\input{generated/tab-sweep-batch-latency-s}
+\inputrows{generated/tab-sweep-batch-latency-s.tex}
 \bottomrule
 \end{tabular}
 \end{table}
@@ -250,7 +249,7 @@ which \CostTopShare{}\,\% is \CostTopService{}.
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Modelled monthly cost, single spacecraft, on-demand list prices, no
 committed-use discounts. Lines below USD~0.01 omitted.}
 \label{tab:cost}
@@ -258,21 +257,21 @@ committed-use discounts. Lines below USD~0.01 omitted.}
 \toprule
 Service & Cost driver & USD/month \\
 \midrule
-\input{generated/tab-cost}
+\inputrows{generated/tab-cost.tex}
 \bottomrule
 \end{tabular}
 \end{table}
 
 \begin{table}[t]
 \centering
-\small
+\footnotesize
 \caption{Cost scaling. The architecture is a fixed platform cost at small scale.}
 \label{tab:cost-scaling}
 \begin{tabular}{@{}rrrr@{}}
 \toprule
 Spacecraft & Events/day & USD/month & USD/spacecraft \\
 \midrule
-\input{generated/tab-cost-scaling}
+\inputrows{generated/tab-cost-scaling.tex}
 \bottomrule
 \end{tabular}
 \end{table}

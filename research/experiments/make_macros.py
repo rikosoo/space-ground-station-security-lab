@@ -18,11 +18,11 @@ OUT = ROOT / "research" / "paper" / "generated"
 
 RULE_NAMES = {
     "R01": "Brute force then success", "R02": "Unprofiled origin",
-    "R03": "RBAC violation", "R04": "Unusual critical command",
-    "R05": "Uplink authentication failure", "R06": "Frame integrity cluster",
+    "R03": "RBAC violation", "R04": "Unusual critical cmd",
+    "R05": "Uplink auth failure", "R06": "Frame integrity cluster",
     "R07": "Physics violation", "R08": "Replayed frame",
     "R09": "Archive enumeration", "R10": "Archive volume anomaly",
-    "R11": "Control-plane tampering",
+    "R11": "Control-plane change",
 }
 ABLATION_LABELS = {
     "full": "Full stack", "no_mfa": "No MFA", "no_rbac": "No RBAC",
@@ -35,6 +35,17 @@ ABLATION_LABELS = {
 
 def esc(text: str) -> str:
     return text.replace("&", r"\&").replace("_", r"\_").replace("%", r"\%")
+
+
+def write_rows(path: pathlib.Path, rows: list) -> None:
+    """Write the body rows of one table.
+
+    These files are read with the TeX primitive (``\\inputrows`` in the paper's
+    preamble), not with LaTeX's ``\\input``: the latter injects a ``\\par`` at end
+    of file, which inside a tabular arrives before the last row is closed and
+    makes the following ``\\bottomrule`` report a misplaced ``\\noalign``.
+    """
+    path.write_text("\n".join(rows).rstrip() + "\n")
 
 
 def main() -> None:
@@ -73,7 +84,7 @@ def main() -> None:
             f"& $\\pm${a['ttd_ci95_s']:.1f} & {a['ttd_median_s']:.1f} "
             f"& {a['ttc_mean_s']:.1f} & {first} "
             f"& {a['mean_malicious_successes']:.1f} \\\\")
-    (OUT / "tab-baseline.tex").write_text("\n".join(rows) + "\n")
+    write_rows(OUT / "tab-baseline.tex", rows)
 
     rows = []
     for rid in sorted(set(RULE_NAMES) | set(base["rules"])):
@@ -82,7 +93,7 @@ def main() -> None:
         prec = "--" if st["tp"] + st["fp"] == 0 else f"{st['precision'] * 100:.0f}"
         rows.append(f"{rid} & {esc(RULE_NAMES.get(rid, '--'))} & {st['tp']} & {st['fp']} "
                     f"& {prec} & {st['fp_per_day']:.2f} \\\\")
-    (OUT / "tab-rules.tex").write_text("\n".join(rows) + "\n")
+    write_rows(OUT / "tab-rules.tex", rows)
 
     # ---- ablation -----------------------------------------------------------
     abl = json.loads((RESULTS / "ablation.json").read_text())
@@ -93,7 +104,7 @@ def main() -> None:
             f"& {cfg['mean_ttd_s']:.1f} & {cfg['total_malicious_successes']:.1f} "
             f"& {cfg['critical_commands_executed']:.1f} & {cfg['mb_exfiltrated']:,.0f} "
             f"& {cfg['fp_per_day']:.2f} \\\\")
-    (OUT / "tab-ablation.tex").write_text("\n".join(rows) + "\n")
+    write_rows(OUT / "tab-ablation.tex", rows)
     full = abl["configurations"]["full"]
     macros += [
         rf"\newcommand{{\AblFullCrit}}{{{full['critical_commands_executed']:.1f}}}",
@@ -119,7 +130,7 @@ def main() -> None:
         rows = [f"{r['value']} & {r['mean_ttd_s']:.1f} & {r['detection_rate'] * 100:.0f} "
                 f"& {r['fp_per_day']:.2f} & {r['precision'] * 100:.0f} \\\\"
                 for r in rows_in]
-        (OUT / f"tab-sweep-{param.replace('_', '-')}.tex").write_text("\n".join(rows) + "\n")
+        write_rows(OUT / f"tab-sweep-{param.replace('_', '-')}.tex", rows)
     integ = {r["value"]: r for r in sweep["sweeps"]["integrity_threshold"]}
     macros += [
         rf"\newcommand{{\SweepIntegOneFP}}{{{integ[1]['fp_per_day']:.2f}}}",
@@ -140,7 +151,7 @@ def main() -> None:
             for ln in lines if ln["monthly_usd"] >= 0.01]
     rows.append(r"\midrule")
     rows.append(f"\\textbf{{Total}} & & \\textbf{{{cost['total_monthly_usd']:,.2f}}} \\\\")
-    (OUT / "tab-cost.tex").write_text("\n".join(rows) + "\n")
+    write_rows(OUT / "tab-cost.tex", rows)
     macros += [
         rf"\newcommand{{\CostMonthly}}{{{cost['total_monthly_usd']:,.0f}}}",
         rf"\newcommand{{\CostTopService}}{{{esc(lines[0]['service'])}}}",
@@ -152,7 +163,7 @@ def main() -> None:
     for ln in scaling:
         cells = [c.strip() for c in ln.strip("|").split("|")]
         rows.append(" & ".join(cells) + r" \\")
-    (OUT / "tab-cost-scaling.tex").write_text("\n".join(rows) + "\n")
+    write_rows(OUT / "tab-cost-scaling.tex", rows)
     per_hundred = scaling[-1].strip("|").split("|")[-1].strip()
     macros.append(rf"\newcommand{{\CostPerHundred}}{{{per_hundred}}}")
 
