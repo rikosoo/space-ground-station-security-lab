@@ -227,6 +227,19 @@ def mean_ci(values: List[float], confidence: float = 0.95) -> tuple[float, float
     return m, z * sd / math.sqrt(len(vals))
 
 
+def percentile(values: List[float], q: float) -> Optional[float]:
+    """Nearest-rank percentile, so the value returned is one that was measured.
+
+    Reported alongside the mean because a mean with a symmetric confidence
+    interval describes a unimodal distribution, and not every attack has one.
+    """
+    vals = sorted(v for v in values if v is not None)
+    if not vals:
+        return None
+    rank = max(1, math.ceil(q / 100.0 * len(vals)))
+    return vals[min(rank, len(vals)) - 1]
+
+
 def aggregate(trials: List[TrialResult]) -> dict:
     """Aggregate trials into the numbers reported in the paper."""
     out: dict = {"n_trials": len(trials), "attacks": {}, "rules": {}}
@@ -247,6 +260,7 @@ def aggregate(trials: List[TrialResult]) -> dict:
             "containment_rate": sum(o.contained for o in outs) / len(outs),
             "ttd_mean_s": m_ttd, "ttd_ci95_s": ci_ttd,
             "ttd_median_s": statistics.median(ttds) if ttds else None,
+            "ttd_p95_s": percentile(ttds, 95.0),
             "ttd_min_s": min(ttds) if ttds else None,
             "ttd_max_s": max(ttds) if ttds else None,
             "ttc_mean_s": m_ttc, "ttc_ci95_s": ci_ttc,

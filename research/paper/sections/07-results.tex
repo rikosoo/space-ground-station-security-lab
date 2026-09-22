@@ -9,29 +9,54 @@ All five attacks were detected in all \ResTrials{} trials
 
 \begin{table*}[t]
 \centering
-\small
+\footnotesize
 \caption{Per-attack detection performance over \ResTrials{} trials. TTD and TTC
 are measured from the first malicious action and include pipeline latency.
 ``Actions that succeeded'' counts adversary actions that took effect, whether or
-not they were detected.}
+not they were detected. Median and p95 are given alongside the mean because A2's
+latency is bimodal, and for that attack the mean describes no trial that actually
+occurred; its maximum is \ResTTDMaxAtwo{}\,s.}
 \label{tab:baseline}
-\begin{tabular}{@{}lrrrrrlr@{}}
+\begin{tabular}{@{}lrrrrrrlr@{}}
 \toprule
-Attack & Det.\ (\%) & Mean TTD (s) & 95\,\% CI & Median TTD (s) & Mean TTC (s) &
-First rule & Actions succeeded \\
+Attack & Det.\ (\%) & Mean TTD (s) & 95\,\% CI & Median TTD (s) & p95 TTD (s) &
+Mean TTC (s) & First rule & Actions succeeded \\
 \midrule
 \inputrows{generated/tab-baseline.tex}
 \bottomrule
 \end{tabular}
 \end{table*}
 
-The striking feature is not the latency but its \emph{variance}, or rather the
-absence of it: four of the five attacks show a confidence interval of zero across
-ten trials with randomised start times. Latency here is a property of the
-architecture, not of the adversary, and it decomposes cleanly into two terms.
+The striking feature is not the latency but its \emph{variance}, and what
+governs it. For four of the five attacks the distribution is tight across trials
+with randomised start times: A4 is identical in every trial, and A1, A3 and A5
+vary by $\pm$\ResCIAone{}\,s, $\pm$\ResCIAthree{}\,s and $\pm$\ResCIAfive{}\,s
+about means of tens to hundreds of seconds. For those four, latency is a property
+of the architecture rather than of the adversary, and it decomposes cleanly into
+two terms.
 
-The first term is the pipeline. A2, A3 and A4 are detected in
-\ResTTDAtwo{}\,s, \ResTTDAthree{}\,s and \ResTTDAfour{}\,s respectively ---
+A2 is the exception, and it is the more instructive case. Its mean of
+\ResTTDAtwo{}\,s describes no trial that occurred, because the distribution is
+bimodal. In \ResFirstRuleTrialsAtwo{} of \ResTrials{} trials the hijacked session
+is observable, \ResFirstRuleAtwo{} fires on it, and the attack is detected in
+\ResTTDMedianAtwo{}\,s. In the remaining \ResFallbackTrialsAtwo{} the session
+never materialises: the operator account A2 targets was already blocked by an
+earlier automated response --- usually one triggered by a false positive days
+before --- and the API refuses the hijack without emitting an authentication
+event at all. With no logon to reason about, \ResFirstRuleAtwo{} has nothing to
+evaluate, and detection falls through to \ResFallbackRuleAtwo{} on the RF phase,
+which can only fire while the spacecraft is in a pass window. Latency is then set
+by orbital mechanics rather than by the pipeline, reaching \ResTTDMaxAtwo{}\,s.
+
+Two things follow. First, a campaign of ten trials has a substantial chance of
+drawing none of the slow mode and reporting a confidence interval of zero for A2,
+which is why the baseline here runs \ResTrials{}. Second, the second mode is not
+an adversary capability: it is an interaction between the response system and the
+detection system, in which containing one attack degrades the observability of
+the next. We return to this in Section~\ref{sec:discussion}.
+
+The first term is the pipeline. A2 (in its fast mode), A3 and A4 are detected in
+\ResTTDMedianAtwo{}\,s, \ResTTDAthree{}\,s and \ResTTDAfour{}\,s respectively ---
 essentially the stream-path latency itself --- because their first malicious
 action is already sufficient evidence: a session from an unprofiled origin, a
 frame that failed its tag, a duplicated frame counter. Nothing needs to

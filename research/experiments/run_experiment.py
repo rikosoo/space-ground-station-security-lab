@@ -50,33 +50,41 @@ def _write(name: str, payload: dict, markdown: str) -> None:
 
 # --------------------------------------------------------------------- baseline
 def cmd_baseline(args) -> dict:
+    n = args.baseline_trials
     trials = []
     t0 = time.time()
-    for i in range(args.trials):
+    for i in range(n):
         cfg = TrialConfig(seed=args.seed + i, warmup_days=args.warmup,
                           measure_days=args.measure)
         trials.append(run_trial(cfg))
-        print(f"  trial {i + 1}/{args.trials} (seed {cfg.seed}) done", flush=True)
+        if (i + 1) % 10 == 0 or i + 1 == n:
+            print(f"  trial {i + 1}/{n} (seed {cfg.seed}) done", flush=True)
     agg = aggregate(trials)
     agg["wall_time_s"] = round(time.time() - t0, 1)
-    agg["config"] = {"trials": args.trials, "warmup_days": args.warmup,
+    agg["config"] = {"trials": n, "warmup_days": args.warmup,
                      "measure_days": args.measure, "seed0": args.seed}
 
     lines = ["# Baseline detection performance", "",
-             f"{args.trials} independent trials, {args.warmup:.0f}-day warm-up + "
+             f"{n} independent trials, {args.warmup:.0f}-day warm-up + "
              f"{args.measure:.0f}-day measurement window each "
              f"({agg['events_per_trial']:,.0f} events per measurement window).", "",
+             "Median, p95 and max are reported next to the mean because not every "
+             "attack has a unimodal latency distribution: where the first-firing "
+             "rule varies between trials, so does the order of magnitude of the "
+             "latency, and a mean with a symmetric interval would hide that.", "",
              "## Per-attack results", "",
              "| ID | Attack | Detection rate | Mean TTD (s) | 95% CI | Median TTD (s) "
-             "| Mean TTC (s) | First-firing rule(s) | Malicious actions that succeeded |",
-             "|---|---|---:|---:|---:|---:|---:|---|---:|"]
+             "| p95 TTD (s) | Max TTD (s) | Mean TTC (s) | First-firing rule(s) "
+             "| Malicious actions that succeeded |",
+             "|---|---|---:|---:|---:|---:|---:|---:|---:|---|---:|"]
     for aid, a in agg["attacks"].items():
         rules = ", ".join(f"{k} ({v})" for k, v in sorted(
             a["first_rule_freq"].items(), key=lambda kv: -kv[1]))
         lines.append(
             f"| {aid} | {a['name']} | {a['detection_rate']:.0%} | "
             f"{_fmt(a['ttd_mean_s'])} | ±{_fmt(a['ttd_ci95_s'])} | "
-            f"{_fmt(a['ttd_median_s'])} | {_fmt(a['ttc_mean_s'])} | {rules} | "
+            f"{_fmt(a['ttd_median_s'])} | {_fmt(a['ttd_p95_s'])} | "
+            f"{_fmt(a['ttd_max_s'])} | {_fmt(a['ttc_mean_s'])} | {rules} | "
             f"{a['mean_malicious_successes']:.1f} |")
     lines += ["", "## Alert quality", "",
               f"- False positives: **{agg['false_positives_per_day']['mean']:.2f} "
@@ -278,7 +286,14 @@ def main() -> None:
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("command", choices=["baseline", "ablation", "sweep", "cost",
                                         "dataset", "all"])
-    ap.add_argument("--trials", type=int, default=10)
+    ap.add_argument("--trials", type=int, default=10,
+                    help="trials per configuration for ablation and sweep, where "
+                         "only the mean is reported")
+    ap.add_argument("--baseline-trials", type=int, default=100,
+                    help="trials for the baseline campaign. Higher than --trials "
+                         "because the baseline is where per-attack latency "
+                         "variance is characterised, and A2's tail is rare "
+                         "enough that ten trials can miss it entirely")
     ap.add_argument("--seed", type=int, default=1000)
     ap.add_argument("--warmup", type=float, default=7.0)
     ap.add_argument("--measure", type=float, default=7.0)

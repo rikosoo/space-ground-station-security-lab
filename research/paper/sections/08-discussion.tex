@@ -1,4 +1,5 @@
 \section{Discussion}
+\label{sec:discussion}
 
 \subsection{Answering the research question}
 
@@ -74,6 +75,32 @@ operator population is a handful of named people working from a handful of known
 networks, it is one of the strongest signals available. Threat detection content
 does not transfer between domains unchanged, and this is a case where the domain
 makes a weak enterprise rule into a strong one.
+
+\subsection{Containment degrades the observability of later attacks}
+
+The A2 latency distribution in Section~\ref{sec:results} is bimodal for a reason
+that has nothing to do with the adversary. Automated containment blocks a
+principal, and in this architecture a block is permanent for the remainder of the
+campaign. When a false positive blocks a benign operator --- which happens at the
+false-positive rate the pack already reports --- that account stops being usable,
+and the mission-control API refuses any later session for it \emph{silently},
+without emitting an authentication event. An adversary who subsequently targets
+that account therefore produces no logon for the behavioural rules to evaluate.
+Detection does not fail, but it falls back to a slower path: in our campaign,
+from \ResTTDMedianAtwo{}\,s on the session to as much as \ResTTDMaxAtwo{}\,s on
+the radio-frequency phase, which can only be observed during a pass.
+
+This is worth stating plainly because it inverts an assumption that is easy to
+make. Automated response is normally evaluated on what it prevents, and
+Section~\ref{sec:results} reports that in those terms. But a response action also
+changes what the telemetry contains, and a control that removes an actor from the
+system removes that actor's events along with it. The effect is not confined to
+this testbed: any architecture that disables accounts automatically and logs
+refusals at a different fidelity than successes will have the same blind spot.
+Two mitigations follow directly --- expire automated blocks rather than leaving
+them indefinite, and emit an explicit event when an action is refused because the
+principal is blocked, so that the refusal is itself a detectable signal. We did
+not implement either here; measuring them is future work.
 
 \subsection{Implications for practitioners}
 

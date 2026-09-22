@@ -71,7 +71,26 @@ def main() -> None:
             rf"\newcommand{{\ResTTD{tag}}}{{{a['ttd_mean_s']:.1f}}}",
             rf"\newcommand{{\ResTTC{tag}}}{{{a['ttc_mean_s']:.1f}}}",
             rf"\newcommand{{\ResDet{tag}}}{{{a['detection_rate'] * 100:.0f}}}",
+            rf"\newcommand{{\ResTTDMedian{tag}}}{{{a['ttd_median_s']:.1f}}}",
+            rf"\newcommand{{\ResTTDPNinetyFive{tag}}}{{{a['ttd_p95_s']:.1f}}}",
+            rf"\newcommand{{\ResTTDMax{tag}}}{{{a['ttd_max_s']:.1f}}}",
+            rf"\newcommand{{\ResCI{tag}}}{{{a['ttd_ci95_s']:.1f}}}",
         ]
+        # How often each rule was the first to fire. An attack whose modal rule
+        # covers every trial has one detection path; one whose does not has
+        # several, with a latency scale per path.
+        freq = a["first_rule_freq"]
+        modal = max(freq, key=lambda k: freq[k])
+        macros += [
+            rf"\newcommand{{\ResFirstRule{tag}}}{{{modal}}}",
+            rf"\newcommand{{\ResFirstRuleTrials{tag}}}{{{freq[modal]}}}",
+            rf"\newcommand{{\ResFallbackTrials{tag}}}"
+            rf"{{{sum(v for k, v in freq.items() if k != modal)}}}",
+        ]
+        fallback = sorted((k for k in freq if k != modal),
+                          key=lambda k: -freq[k])
+        macros.append(rf"\newcommand{{\ResFallbackRule{tag}}}"
+                      rf"{{{fallback[0] if fallback else '--'}}}")
     macros.append(rf"\newcommand{{\ResTTDMean}}{{{sum(ttds) / len(ttds):.1f}}}")
     macros.append(rf"\newcommand{{\ResTTDStream}}{{{min(ttds):.1f}}}")
 
@@ -82,6 +101,7 @@ def main() -> None:
         rows.append(
             f"{aid} & {a['detection_rate'] * 100:.0f} & {a['ttd_mean_s']:.1f} "
             f"& $\\pm${a['ttd_ci95_s']:.1f} & {a['ttd_median_s']:.1f} "
+            f"& {a['ttd_p95_s']:.1f} "
             f"& {a['ttc_mean_s']:.1f} & {first} "
             f"& {a['mean_malicious_successes']:.1f} \\\\")
     write_rows(OUT / "tab-baseline.tex", rows)

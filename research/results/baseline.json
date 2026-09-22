@@ -1,22 +1,23 @@
 {
-  "n_trials": 10,
+  "n_trials": 100,
   "attacks": {
     "A1": {
       "name": "Credential compromise of a mission operator account",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 48.0,
-      "ttd_ci95_s": 0.0,
+      "ttd_mean_s": 47.56,
+      "ttd_ci95_s": 0.523645749635296,
       "ttd_median_s": 48.0,
-      "ttd_min_s": 48.0,
+      "ttd_p95_s": 48.0,
+      "ttd_min_s": 26.0,
       "ttd_max_s": 48.0,
-      "ttc_mean_s": 68.0,
-      "ttc_ci95_s": 0.0,
+      "ttc_mean_s": 67.56,
+      "ttc_ci95_s": 0.523645749635296,
       "first_rule_freq": {
-        "R01": 10
+        "R01": 100
       },
       "contributing_rule_freq": {
-        "R01": 10
+        "R01": 100
       },
       "mean_malicious_successes": 0,
       "mean_successes_after_containment": 0,
@@ -28,25 +29,27 @@
       "name": "Unauthorized telecommand against the spacecraft bus",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 4.0,
-      "ttd_ci95_s": 0.0,
+      "ttd_mean_s": 1785.9,
+      "ttd_ci95_s": 1673.610700853201,
       "ttd_median_s": 4.0,
+      "ttd_p95_s": 5924.0,
       "ttd_min_s": 4.0,
-      "ttd_max_s": 4.0,
-      "ttc_mean_s": 44.0,
-      "ttc_ci95_s": 0.0,
+      "ttd_max_s": 49544.0,
+      "ttc_mean_s": 1824.3,
+      "ttc_ci95_s": 1672.8506769464398,
       "first_rule_freq": {
-        "R02": 10
+        "R02": 92,
+        "R05": 8
       },
       "contributing_rule_freq": {
-        "R02": 10,
-        "R03": 10,
-        "R04": 10,
-        "R05": 10
+        "R02": 92,
+        "R03": 92,
+        "R04": 92,
+        "R05": 100
       },
       "mean_malicious_successes": 0,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 6,
+      "mean_alerts": 5.6,
       "mean_critical_commands_executed": 0,
       "mean_bytes_exfiltrated": 0
     },
@@ -54,25 +57,26 @@
       "name": "False data injection into the telemetry stream",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 14.0,
-      "ttd_ci95_s": 0.0,
+      "ttd_mean_s": 13.55,
+      "ttd_ci95_s": 0.28187102143936815,
       "ttd_median_s": 14.0,
-      "ttd_min_s": 14.0,
+      "ttd_p95_s": 14.0,
+      "ttd_min_s": 9.0,
       "ttd_max_s": 14.0,
-      "ttc_mean_s": 34.0,
-      "ttc_ci95_s": 0.0,
+      "ttc_mean_s": 33.55,
+      "ttc_ci95_s": 0.28187102143936815,
       "first_rule_freq": {
-        "R06": 10
+        "R06": 100
       },
       "contributing_rule_freq": {
-        "R02": 8,
-        "R06": 10,
-        "R07": 8,
-        "R11": 8
+        "R02": 80,
+        "R06": 100,
+        "R07": 77,
+        "R11": 80
       },
       "mean_malicious_successes": 27.6,
       "mean_successes_after_containment": 21.6,
-      "mean_alerts": 3.6,
+      "mean_alerts": 3.57,
       "mean_critical_commands_executed": 0.8,
       "mean_bytes_exfiltrated": 0
     },
@@ -83,21 +87,22 @@
       "ttd_mean_s": 4.0,
       "ttd_ci95_s": 0.0,
       "ttd_median_s": 4.0,
+      "ttd_p95_s": 4.0,
       "ttd_min_s": 4.0,
       "ttd_max_s": 4.0,
       "ttc_mean_s": 24.0,
       "ttc_ci95_s": 0.0,
       "first_rule_freq": {
-        "R08": 9,
-        "R05": 1
+        "R08": 93,
+        "R05": 7
       },
       "contributing_rule_freq": {
-        "R08": 10,
-        "R05": 1
+        "R08": 100,
+        "R05": 7
       },
       "mean_malicious_successes": 0,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 2.2,
+      "mean_alerts": 2.14,
       "mean_critical_commands_executed": 0,
       "mean_bytes_exfiltrated": 0
     },
@@ -105,101 +110,110 @@
       "name": "Bulk exfiltration of archived mission telemetry",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 242.54758024215698,
-      "ttd_ci95_s": 4.470191720980439,
+      "ttd_mean_s": 241.4147580242157,
+      "ttd_ci95_s": 2.274577321931644,
       "ttd_median_s": 246.0,
-      "ttd_min_s": 223.47580242156982,
+      "ttd_p95_s": 246.0,
+      "ttd_min_s": 166.0,
       "ttd_max_s": 246.0,
-      "ttc_mean_s": 262.547580242157,
-      "ttc_ci95_s": 4.470191720980439,
+      "ttc_mean_s": 262.8147580242157,
+      "ttc_ci95_s": 1.2954469177684091,
       "first_rule_freq": {
-        "R09": 10
+        "R09": 96,
+        "R10": 4
       },
       "contributing_rule_freq": {
-        "R09": 10,
-        "R11": 10
+        "R09": 100,
+        "R11": 100,
+        "R10": 4
       },
-      "mean_malicious_successes": 24.1,
+      "mean_malicious_successes": 24.2,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 2,
+      "mean_alerts": 2.04,
       "mean_critical_commands_executed": 0,
-      "mean_bytes_exfiltrated": 1212992716.8
+      "mean_bytes_exfiltrated": 1218025881.6
     }
   },
   "rules": {
     "R01": {
-      "tp": 10,
-      "fp": 1,
-      "precision": 0.9090909090909091,
-      "fp_per_day": 0.014285714285714285
+      "tp": 100,
+      "fp": 32,
+      "precision": 0.7575757575757576,
+      "fp_per_day": 0.045714285714285714
     },
     "R02": {
-      "tp": 18,
-      "fp": 2,
-      "precision": 0.9,
-      "fp_per_day": 0.02857142857142857
+      "tp": 172,
+      "fp": 12,
+      "precision": 0.9347826086956522,
+      "fp_per_day": 0.017142857142857144
     },
     "R03": {
-      "tp": 10,
+      "tp": 92,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     },
     "R04": {
-      "tp": 30,
-      "fp": 0,
-      "precision": 1.0,
-      "fp_per_day": 0.0
+      "tp": 276,
+      "fp": 4,
+      "precision": 0.9857142857142858,
+      "fp_per_day": 0.005714285714285714
     },
     "R05": {
-      "tp": 12,
+      "tp": 114,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     },
     "R06": {
-      "tp": 12,
-      "fp": 2,
-      "precision": 0.8571428571428571,
-      "fp_per_day": 0.02857142857142857
+      "tp": 120,
+      "fp": 5,
+      "precision": 0.96,
+      "fp_per_day": 0.007142857142857143
     },
     "R07": {
-      "tp": 8,
-      "fp": 20,
-      "precision": 0.2857142857142857,
-      "fp_per_day": 0.2857142857142857
+      "tp": 77,
+      "fp": 159,
+      "precision": 0.326271186440678,
+      "fp_per_day": 0.22714285714285715
     },
     "R08": {
-      "tp": 20,
+      "tp": 200,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     },
     "R09": {
-      "tp": 10,
-      "fp": 10,
+      "tp": 100,
+      "fp": 100,
       "precision": 0.5,
       "fp_per_day": 0.14285714285714285
     },
+    "R10": {
+      "tp": 4,
+      "fp": 0,
+      "precision": 1.0,
+      "fp_per_day": 0.0
+    },
     "R11": {
-      "tp": 18,
+      "tp": 180,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     }
   },
   "false_positives_per_day": {
-    "mean": 0.5,
-    "ci95": 0.11988883740087453
+    "mean": 0.4457142857142857,
+    "ci95": 0.04160310788701471
   },
   "precision": {
-    "mean": 0.8121664455255786,
-    "ci95": 0.03718967031543969
+    "mean": 0.8252461408130913,
+    "ci95": 0.013884595613215566
   },
-  "events_per_trial": 5663.5,
-  "wall_time_s": 24.4,
+  "events_per_trial": 5673.48,
+  "wall_time_s": 205.1,
   "config": {
-    "trials": 10,
+    "trials": 100,
     "warmup_days": 7.0,
     "measure_days": 7.0,
     "seed0": 1000
