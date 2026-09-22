@@ -42,10 +42,22 @@ class Rule:
     def evaluate(self, event: Event) -> Optional[List[Alert]]:
         raise NotImplementedError
 
-    def alert(self, entity: str, event: Event, evidence: List[Event], **detail) -> Alert:
+    def tick(self, now: float) -> Optional[List[Alert]]:
+        """Evaluate anything that is due on the clock rather than on an event.
+
+        Batch-tier rules that aggregate over a fixed window run as a scheduled
+        job in the deployed system, so their window has to close on time even
+        when the principal they are aggregating has stopped producing events --
+        which is exactly what automated containment causes.
+        """
+        return None
+
+    def alert(self, entity: str, event: Event, evidence: List[Event],
+              at: Optional[float] = None, **detail) -> Alert:
+        trigger = event.ts if at is None else at
         return Alert(
-            ts=event.ts + self.engine.latency_for(self.tier),
-            trigger_ts=event.ts,
+            ts=trigger + self.engine.latency_for(self.tier),
+            trigger_ts=trigger,
             rule_id=self.id,
             rule_name=self.name,
             severity=self.severity,
@@ -355,18 +367,40 @@ class ArchiveVolumeAnomaly(Rule):
         if event.event_type != "s3.GetObject" or event.outcome != OUTCOME_SUCCESS:
             return None
         p = event.actor
-        start = self.bucket_start.setdefault(p, event.ts)
-        out = None
-        if event.ts - start >= self.BUCKET_S:
-            out = self._close_bucket(p, event)
-            self.bucket_start[p] = event.ts
+        self.bucket_start.setdefault(p, event.ts)
         self.bucket_bytes[p] += event.attrs.get("bytes", 0)
         self.bucket_events[p].append(event)
-        return out
+        return None
 
-    def _close_bucket(self, p: str, event: Event):
+    def tick(self, now: float):
+        """Close every bucket whose hour has elapsed.
+
+        Closing on the clock rather than on the principal's next read is what
+        makes this rule able to report the burst it exists to detect: once R09
+        fires and the responder denies the principal, no further read arrives,
+        and a bucket that waits for one is never evaluated at all.
+        """
+        out = []
+        for p, start in list(self.bucket_start.items()):
+            if now - start < self.BUCKET_S:
+                continue
+            alerts = self._close_bucket(p, at=start + self.BUCKET_S)
+            if alerts:
+                out.extend(alerts)
+            # Keep the buckets aligned to the original grid, skipping any whole
+            # hours in which the principal read nothing at all.
+            elapsed = now - start
+            self.bucket_start[p] = start + (elapsed // self.BUCKET_S) * self.BUCKET_S
+        return out or None
+
+    def _close_bucket(self, p: str, at: float):
         total = self.bucket_bytes.pop(p, 0.0)
         evidence = self.bucket_events.pop(p, [])
+        # An hour in which the principal read nothing is not a sample of its
+        # read volume, and counting it as one would drag the baseline mean
+        # towards zero for every principal that works in bursts.
+        if not evidence:
+            return None
         b = self.engine.baseline
         if self.cfg.learning:
             b.read_bytes_hourly.setdefault(p, []).append(total)
@@ -377,8 +411,8 @@ class ArchiveVolumeAnomaly(Rule):
         z = (total - mean) / std
         if z < self.cfg.exfil_zscore:
             return None
-        return [self.alert(p, event, evidence, bytes=total, baseline_mean=round(mean, 1),
-                           zscore=round(z, 2))]
+        return [self.alert(p, evidence[-1], evidence, at=at, bytes=total,
+                           baseline_mean=round(mean, 1), zscore=round(z, 2))]
 
 
 # --------------------------------------------------------------------- R11

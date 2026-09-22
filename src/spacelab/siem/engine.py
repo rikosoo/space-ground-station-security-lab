@@ -108,7 +108,13 @@ class DetectionEngine:
 
     # ------------------------------------------------------------------ core
     def consume(self, event: Event) -> None:
+        # Event time is the only clock the engine has, and it advances whoever
+        # produced the event. A scheduled rule therefore still runs while one
+        # principal is silent, as long as the ground segment as a whole is not.
+        now = event.ts
         for rule in self.rules:
+            for alert in rule.tick(now) or []:
+                self._emit(alert)
             for alert in rule.evaluate(event) or []:
                 self._emit(alert)
 

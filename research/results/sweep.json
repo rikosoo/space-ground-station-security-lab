@@ -6,35 +6,35 @@
         "mean_ttd_s": 60.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 1.1285714285714286,
-        "precision": 0.6598433968777219
+        "precision": 0.6740226118486988
       },
       {
         "value": 2,
         "mean_ttd_s": 61.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5571428571428572,
-        "precision": 0.7942654095130876
+        "precision": 0.8046445824706694
       },
       {
         "value": 3,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 5,
         "mean_ttd_s": 64.5095160484314,
         "detection_rate": 1.0,
         "fp_per_day": 0.4714285714285714,
-        "precision": 0.8224605631726375
+        "precision": 0.8315871675623997
       },
       {
         "value": 8,
         "mean_ttd_s": 4282.909516048431,
         "detection_rate": 1.0,
         "fp_per_day": 0.4714285714285714,
-        "precision": 0.8122789817681458
+        "precision": 0.8224605631726375
       }
     ],
     "batch_latency_s": [
@@ -43,28 +43,28 @@
         "mean_ttd_s": 38.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 150.0,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 300.0,
         "mean_ttd_s": 92.5095160484314,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 900.0,
         "mean_ttd_s": 212.5095160484314,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       }
     ],
     "exfil_key_threshold": [
@@ -73,35 +73,35 @@
         "mean_ttd_s": 50.56,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 25,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 50,
-        "mean_ttd_s": 82.4,
+        "mean_ttd_s": 80.88828505039216,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8130436385080347
+        "precision": 0.8223680413154097
       },
       {
         "value": 100,
-        "mean_ttd_s": 117.2,
+        "mean_ttd_s": 116.96828505039215,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8136972332792766
+        "precision": 0.8223680413154097
       },
       {
         "value": 200,
-        "mean_ttd_s": 206.72,
+        "mean_ttd_s": 212.08895622253416,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8031613347093223
+        "precision": 0.8138726718757678
       }
     ],
     "dedup_cooldown_s": [
@@ -110,28 +110,28 @@
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5142857142857142,
-        "precision": 0.8174599377230956
+        "precision": 0.8263019703408719
       },
       {
         "value": 300.0,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.5,
-        "precision": 0.8121664455255786
+        "precision": 0.8217832459937723
       },
       {
         "value": 900.0,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.4857142857142857,
-        "precision": 0.8062994496044031
+        "precision": 0.8167905056759546
       },
       {
         "value": 3600.0,
         "mean_ttd_s": 62.509516048431394,
         "detection_rate": 1.0,
         "fp_per_day": 0.4857142857142857,
-        "precision": 0.8062994496044031
+        "precision": 0.8167905056759546
       }
     ]
   }

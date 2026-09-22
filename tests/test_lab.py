@@ -158,6 +158,20 @@ def test_disabling_anti_replay_lets_the_replay_execute():
     assert exposed.outcomes["A4"].detected, "ground-side duplicate detection must remain"
 
 
+def test_archive_volume_rule_reports_a_burst_that_containment_silenced():
+    """R10 must close its window on the clock, not on the principal's next read.
+
+    Once R09 fires and the responder denies the principal, no further read
+    arrives. A rule that waits for one never evaluates the hour the burst
+    happened in, and so can never report the exfiltration it exists to detect.
+    """
+    result = run_trial(TrialConfig(seed=1000, warmup_days=7, measure_days=7,
+                                   scenario_ids=["A5"]))
+    outcome = result.outcomes["A5"]
+    assert outcome.contained, "the scenario under test is the contained one"
+    assert "R10" in outcome.all_rules, "R10 never evaluated the burst's hour"
+
+
 def test_determinism():
     """Same seed, same numbers - the reproducibility claim in the paper."""
     a = run_trial(TrialConfig(seed=99, warmup_days=4, measure_days=3))

@@ -105,16 +105,30 @@ benign anomalies the workload was built to contain: an operator whose typos
 crossed the brute-force threshold, and the weekly reprocessing job, whose access
 pattern R09 cannot distinguish from exfiltration on volume alone.
 
-One rule never fired at all. R10, the archive volume anomaly, produced neither
-true nor false positives: in benign traffic no principal exceeded four standard
-deviations of its own hourly baseline, and during A5 the enumeration rule and the
-automated containment both acted well before the first hourly bucket closed. We
-report this rather than quietly dropping the rule. It is redundant \emph{in this
-configuration}, and it would stop being redundant against an adversary who reads
-a small number of very large objects --- exactly the case an object-count
-threshold cannot see. A rule that never fires is either dead content or an
-uncollected insurance premium, and distinguishing the two requires saying which
-attack it is for.
+R10, the archive volume anomaly, is worth a paragraph for a different reason. It
+corroborates A5 in every trial at no cost in noise (Table~\ref{tab:rules}), but
+it does so only after a defect we found by asking why it had previously fired
+almost never. The rule aggregates bytes read into hourly buckets, and the
+implementation closed a bucket when the \emph{next} read from that principal
+arrived past the hour boundary. That is sound while traffic continues and
+silently wrong the moment it stops --- and stopping it is precisely what
+containment does. Once R09 fired and the responder denied the principal, no
+further read ever arrived, so the bucket holding the exfiltration was never
+evaluated at all. The rule was not insensitive to the burst; it was never asked
+about it.
+
+Closing buckets on the clock instead, which is what the Sigma form of the rule
+(\texttt{timeframe: 1h}) always specified and what a scheduled analytics job
+does in the deployed system, makes the rule report the burst in every trial
+without adding a single false positive. We record the defect rather than only
+the corrected number because it is an instance of the interaction that
+Section~\ref{sec:discussion} draws out: a detection whose evaluation is driven by
+the arrival of the traffic it inspects can be silenced by any control that stops
+that traffic, and the silence is indistinguishable from an absence of evidence.
+It also changes what R10 is for. It is not a redundant second opinion on A5 ---
+R09 is still the faster detector, and detects first in almost every trial --- but
+an independent one that survives the case an object-count threshold cannot see:
+an adversary who reads a small number of very large objects.
 
 R07's remaining false positives are the most interesting result in this table,
 because the attack causes them. Once A3 disables frame authentication, every

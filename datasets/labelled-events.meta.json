@@ -1,6 +1,6 @@
 {
   "file": "labelled-events.jsonl",
-  "events": 10349,
+  "events": 10350,
   "seed": 1000,
   "warmup_days": 7.0,
   "measure_days": 7.0,
@@ -119,6 +119,7 @@
       ],
       "all_rules": [
         "R09",
+        "R10",
         "R11"
       ],
       "contained": true,
@@ -129,7 +130,7 @@
       "critical_commands_executed": 0,
       "bytes_exfiltrated": 1258291200,
       "successes_after_containment": 0,
-      "alerts": 2
+      "alerts": 3
     }
   }
 }

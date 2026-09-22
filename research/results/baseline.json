@@ -110,26 +110,26 @@
       "name": "Bulk exfiltration of archived mission telemetry",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 241.4147580242157,
-      "ttd_ci95_s": 2.274577321931644,
+      "ttd_mean_s": 242.06288677930831,
+      "ttd_ci95_s": 1.9741887465807526,
       "ttd_median_s": 246.0,
       "ttd_p95_s": 246.0,
-      "ttd_min_s": 166.0,
+      "ttd_min_s": 166.81287550926208,
       "ttd_max_s": 246.0,
       "ttc_mean_s": 262.8147580242157,
       "ttc_ci95_s": 1.2954469177684091,
       "first_rule_freq": {
-        "R09": 96,
-        "R10": 4
+        "R09": 99,
+        "R10": 1
       },
       "contributing_rule_freq": {
         "R09": 100,
-        "R11": 100,
-        "R10": 4
+        "R10": 99,
+        "R11": 100
       },
       "mean_malicious_successes": 24.2,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 2.04,
+      "mean_alerts": 3,
       "mean_critical_commands_executed": 0,
       "mean_bytes_exfiltrated": 1218025881.6
     }
@@ -190,7 +190,7 @@
       "fp_per_day": 0.14285714285714285
     },
     "R10": {
-      "tp": 4,
+      "tp": 100,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
@@ -207,11 +207,11 @@
     "ci95": 0.04160310788701471
   },
   "precision": {
-    "mean": 0.8252461408130913,
-    "ci95": 0.013884595613215566
+    "mean": 0.8345019097203779,
+    "ci95": 0.013174012837339114
   },
-  "events_per_trial": 5673.48,
-  "wall_time_s": 205.1,
+  "events_per_trial": 5674.44,
+  "wall_time_s": 206.2,
   "config": {
     "trials": 100,
     "warmup_days": 7.0,
