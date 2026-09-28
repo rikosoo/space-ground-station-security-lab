@@ -23,6 +23,7 @@ from collections import defaultdict, deque
 from dataclasses import dataclass, field
 from typing import Deque, Dict, Optional
 
+from ..blocks import BlockList
 from ..bus import EventBus
 from ..ccsds import SpacePacket
 from ..crypto import sign
@@ -92,7 +93,7 @@ class MissionControlAPI:
     _recent_cmds: Dict[str, Deque[float]] = field(
         default_factory=lambda: defaultdict(deque)
     )
-    blocked_principals: set = field(default_factory=set)
+    blocked_principals: BlockList = field(default_factory=BlockList)
 
     def add_operator(self, op: Operator) -> None:
         self.operators[op.user_id] = op
@@ -110,7 +111,7 @@ class MissionControlAPI:
             reason = "bad_credentials"
         elif self.enforce_mfa and op.mfa_enrolled and not mfa_presented:
             ok, reason = False, "mfa_required"
-        elif user_id in self.blocked_principals:
+        elif self.blocked_principals.blocked(user_id, t):
             ok, reason = False, "principal_blocked"
 
         token = None
@@ -147,7 +148,7 @@ class MissionControlAPI:
         time, which is precisely why the *origin* of the session is the signal.
         """
         op = self.operators.get(user_id)
-        if op is None or user_id in self.blocked_principals:
+        if op is None or self.blocked_principals.blocked(user_id, t):
             return None
         token = f"tok-{self.rng.getrandbits(48):012x}"
         self.sessions[token] = Session(token, user_id, op.role, src_ip, asn, t)
@@ -204,7 +205,7 @@ class MissionControlAPI:
 
         if sess is None:
             return deny("invalid_session")
-        if sess.user_id in self.blocked_principals:
+        if self.blocked_principals.blocked(sess.user_id, t):
             return deny("principal_blocked")
         if spec is None:
             return deny("unknown_command")

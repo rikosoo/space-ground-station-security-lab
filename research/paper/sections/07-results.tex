@@ -40,10 +40,10 @@ A2 is the exception, and it is the more instructive case. Its mean of
 bimodal. In \ResFirstRuleTrialsAtwo{} of \ResTrials{} trials the hijacked session
 is observable, \ResFirstRuleAtwo{} fires on it, and the attack is detected in
 \ResTTDMedianAtwo{}\,s. In the remaining \ResFallbackTrialsAtwo{} the session
-never materialises: the operator account A2 targets was already blocked by an
-earlier automated response --- usually one triggered by a false positive days
-before --- and the API refuses the hijack without emitting an authentication
-event at all. With no logon to reason about, \ResFirstRuleAtwo{} has nothing to
+never materialises: the operator account A2 targets was still blocked by an
+earlier automated response --- usually one a false positive triggered within the
+preceding \BlockTTLHours{} hours --- and the API refuses the hijack without
+emitting an authentication event at all. With no logon to reason about, \ResFirstRuleAtwo{} has nothing to
 evaluate, and detection falls through to \ResFallbackRuleAtwo{} on the RF phase,
 which can only fire while the spacecraft is in a pass window. Latency is then set
 by orbital mechanics rather than by the pipeline, reaching \ResTTDMaxAtwo{}\,s.
@@ -74,11 +74,25 @@ noise --- which is precisely the trade the sensitivity analysis below quantifies
 
 Across the measurement windows the pack produced
 \ResFPDay{}~$\pm$~\ResFPDayCI{} false positives per day at \ResPrecision{}\,\%
-precision (Table~\ref{tab:rules}). For a single spacecraft that is between three
-and four alerts per week an analyst will close as benign. Whether this is
+precision (Table~\ref{tab:rules}). For a single spacecraft that is
+\ResFPWeek{}~alerts a week an analyst will close as benign. Whether this is
 acceptable is not a question about precision in the abstract: it is a question
-about whether a team that already runs passes can absorb one extra triage per
-weekday, and at this rate it plainly can.
+about whether a team that already runs passes can absorb about one extra triage
+per weekday, and at this rate it plainly can.
+
+That figure depends on something easy to overlook, which we report because it
+changed our own numbers. Automated containment blocks the principal an alert
+names, including when the alert is wrong. If the block never lifts, the benign
+account it hit stops producing events altogether, and an account that produces
+no events cannot produce another false positive. The response was therefore
+suppressing the very quantity we were trying to measure. With blocks that expire
+after \BlockTTLHours{} hours --- the configuration reported here, and the
+realistic one, since a wrongly suspended operator is restored after triage ---
+the rate is \AblFullFP{} per day; with blocks that never lift it is
+\AblNoExpiryFP{}, for the same prevention outcome (\AblNoExpirySucc{} versus
+\AblFullSucc{} adversary actions taking effect). Roughly two in five of the
+false positives the pack really produces were hidden by permanent suspension,
+not avoided by the rules.
 
 \begin{table}[t]
 \centering
@@ -218,6 +232,20 @@ raises total successful malicious actions from \AblFullSucc{} to
 \AblNoResponseMB{}\,MB, with identical detection latency. The alerts were the
 same; the difference is entirely in whether anything acted on them within
 \SI{20}{\second}.
+
+\paragraph{Letting blocks expire costs precision and buys back observability.}
+The block-expiry arm is the only one in the table where a control's removal
+\emph{improves} a reported metric: with blocks that never lift, false positives
+fall from \AblFullFP{} to \AblNoExpiryFP{} per day while prevention is unchanged
+(\AblFullSucc{} versus \AblNoExpirySucc{} actions taking effect). That is not a
+case for permanent blocks. It is the measurement artefact described in
+Section~\ref{sec:results}, seen from the other side: a suspended benign account
+emits nothing further, so it neither trips a rule again nor appears in the
+denominator of anything. What the expiry buys in exchange is the observability
+discussed above --- A2's slow mode, in which an already-blocked account makes the
+adversary's session invisible, becomes rare rather than routine. The choice
+between the two is a real operational trade-off, and a pack that reports only the
+permanent-block number is reporting the flattering half of it.
 
 \paragraph{A control can be redundant because another one already covered it.}
 Disabling MFA changed no outcome at all, which is initially surprising for the

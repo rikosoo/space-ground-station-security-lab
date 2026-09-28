@@ -38,19 +38,20 @@ Regenerate with `python research/experiments/run_experiment.py all`.
 | Attack | Detected | Median time to detect | p95 | First rule to fire | What stopped it |
 |---|---|---|---|---|---|
 | A1 Credential compromise | 100/100 | 48 s | 48 s | R01 brute force | Detecting the spray and revoking the account, before MFA was even tested |
-| A2 Unauthorized command | 100/100 | 4 s | 5,924 s | R02 unprofiled origin (92), R05 uplink auth (8) | RBAC allowlist; SDLS tag for the RF variant |
+| A2 Unauthorized command | 100/100 | 4 s | 4 s | R02 unprofiled origin (98), R05 uplink auth (2) | RBAC allowlist; SDLS tag for the RF variant |
 | A3 Telemetry tampering | 100/100 | 14 s | 14 s | R06 frame integrity | Nothing prevented it; physics analytics caught the stealth phase |
 | A4 Replay | 100/100 | 4 s | 4 s | R08 replay | Spacecraft anti-replay window |
 | A5 Exfiltration | 100/100 | 246 s | 246 s | R09 bulk enumeration | Automated archive deny, after ~24 objects |
 
-The median is the honest summary here, not the mean: A2's latency is bimodal and
-its mean of 1,786 s describes no trial that actually happened. See finding 1.
+The median is the honest summary here, not the mean: A2's latency is still
+bimodal, and its mean of 559 s describes no trial that actually happened. See
+finding 1.
 
-False positives: **0.45 ± 0.04 per day**, precision **82.5%**. Modelled cost:
+False positives: **0.80 ± 0.05 per day**, precision **74.2%**. Modelled cost:
 **~USD 420/month** for one spacecraft, falling to **~USD 80 per spacecraft** at a
 hundred. Full tables in [`research/results/`](research/results/).
 
-Three findings worth the reader's time:
+Four findings worth the reader's time:
 
 1. **Latency is set by the architecture, not by the attack — and when it is not,
    the cause is our own response.** For four of the five attacks the latency
@@ -65,11 +66,14 @@ Three findings worth the reader's time:
    positive triggered days before — so the API refuses the session hijack
    *without emitting an authentication event at all*. With no logon to reason
    about, R02 has nothing to evaluate and detection falls through to R05 on the
-   RF phase, which can only fire during a pass: up to 49,544 s. Containing one
-   attack degraded the observability of the next. At this rate a ten-trial
-   campaign misses the slow mode entirely about 43% of the time — which is
-   exactly what the earlier ten-trial baseline did, reporting a confidence
-   interval of zero for A2. The baseline now runs a hundred trials.
+   RF phase, which can only fire during a pass: up to 49,534 s. Containing one
+   attack degraded the observability of the next. Automated blocks now expire
+   after 24 hours, which cuts the slow mode from 8 trials in 100 to 2 — and
+   costs 0.36 false positives per day, because a restored account can trip a
+   rule again where a suspended one never could. Both halves of that trade are
+   in the ablation table. A ten-trial campaign misses this mode entirely most of
+   the time, which is what the original ten-trial baseline did when it reported
+   a confidence interval of zero for A2; the baseline now runs a hundred.
 2. **Cryptographic integrity and physics-aware analytics are complementary.**
    Attack A3 disables frame authentication and then falsifies telemetry
    plausibly. After that point the only remaining detection is the one that
@@ -79,6 +83,16 @@ Three findings worth the reader's time:
    containment. Turning the automated containment off leaves the detection
    latency identical and raises the exfiltrated volume to 13 GB. The paper
    reports what the response failed to prevent, not just what it saw.
+4. **The response was suppressing the false-positive rate we were measuring.**
+   Containment blocks the principal an alert names, including when the alert is
+   wrong, and a blocked account emits no further events — so it can never trip a
+   rule a second time. While blocks were permanent the pack measured 0.45 false
+   positives per day; once they expire it measures 0.80, for identical
+   prevention. Roughly two in five of the false positives the rules really
+   produce were being hidden by account suspension rather than avoided. Any
+   architecture that auto-disables accounts and logs refusals more quietly than
+   successes has the same blind spot, in its latency numbers and its precision
+   numbers alike.
 
 ## Repository layout
 

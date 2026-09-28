@@ -23,6 +23,7 @@ from dataclasses import dataclass, field
 from typing import Callable, List, Optional
 
 from .api.app import MissionControlAPI, Operator
+from .blocks import DEFAULT_BLOCK_TTL_S, BlockList
 from .bus import EventBus
 from .clock import Clock
 from .cloud.archive import IamPlane, TelemetryArchive
@@ -47,6 +48,9 @@ class Defenses:
     rate_limit: bool = True
     pass_window_check: bool = True
     auto_response: bool = True
+    #: How long an automated block holds before it lifts. ``None`` never lifts
+    #: it, which is what the ablation contrasts against.
+    block_ttl_s: Optional[float] = DEFAULT_BLOCK_TTL_S
 
     @classmethod
     def none(cls) -> "Defenses":
@@ -115,6 +119,7 @@ def build_world(
         enforce_rbac=defenses.rbac, enforce_mfa=defenses.mfa,
         enforce_rate_limit=defenses.rate_limit,
         enforce_pass_window=defenses.pass_window_check,
+        blocked_principals=BlockList(ttl_s=defenses.block_ttl_s),
     )
     for op in (
         Operator("m.alves", "flight_director", "fd-Pa55!2026", "200.147.35.10"),
@@ -126,7 +131,8 @@ def build_world(
     ):
         api.add_operator(op)
 
-    archive = TelemetryArchive(bus=bus)
+    archive = TelemetryArchive(
+        bus=bus, blocked_principals=BlockList(ttl_s=defenses.block_ttl_s))
     iam = IamPlane(bus=bus)
     engine = DetectionEngine(detection or DetectionConfig())
 

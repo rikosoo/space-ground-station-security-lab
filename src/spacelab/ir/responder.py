@@ -88,15 +88,15 @@ class AutomatedResponder:
             "revoke_sessions_and_block_principal", "block_principal",
             "block_principal_and_restore_logging",
         }:
-            w.api.blocked_principals.add(entity)
+            w.api.blocked_principals.add(entity, t)
             for tok, s in list(w.api.sessions.items()):
                 if s.user_id == entity:
                     del w.api.sessions[tok]
-            w.archive.blocked_principals.add(entity)
+            w.archive.blocked_principals.add(entity, t)
             if action.endswith("restore_logging"):
                 w.iam.logging_enabled = True
         elif action == "deny_archive_access":
-            w.archive.blocked_principals.add(entity)
+            w.archive.blocked_principals.add(entity, t)
         elif action == "quarantine_uplink_path":
             w.uplink_quarantined = True
         elif action == "flag_telemetry_untrusted":

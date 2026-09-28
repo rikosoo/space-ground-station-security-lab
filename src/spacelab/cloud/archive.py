@@ -12,6 +12,7 @@ from __future__ import annotations
 from dataclasses import dataclass, field
 from typing import Dict, List
 
+from ..blocks import BlockList
 from ..bus import EventBus
 from ..events import (
     OUTCOME_FAILURE,
@@ -27,7 +28,7 @@ class TelemetryArchive:
     bus: EventBus
     bucket: str = "sgs-telemetry-archive"
     objects: Dict[str, int] = field(default_factory=dict)  # key -> size bytes
-    blocked_principals: set = field(default_factory=set)
+    blocked_principals: BlockList = field(default_factory=BlockList)
     reads: List[dict] = field(default_factory=list)
 
     def put(self, key: str, size_bytes: int) -> None:
@@ -40,7 +41,7 @@ class TelemetryArchive:
         self, principal: str, key: str, t: float, src_ip: str = "-",
         ground_truth: str = "benign", user_agent: str = "aws-sdk-python/1.34",
     ) -> int:
-        denied = principal in self.blocked_principals
+        denied = self.blocked_principals.blocked(principal, t)
         size = self.objects.get(key, 0)
         if not denied:
             self.reads.append({"t": t, "principal": principal, "key": key, "bytes": size})

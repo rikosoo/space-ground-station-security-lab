@@ -3,135 +3,135 @@
     "integrity_threshold": [
       {
         "value": 1,
-        "mean_ttd_s": 60.509516048431394,
+        "mean_ttd_s": 60.56,
         "detection_rate": 1.0,
-        "fp_per_day": 1.1285714285714286,
-        "precision": 0.6740226118486988
+        "fp_per_day": 1.4142857142857144,
+        "precision": 0.6264158048625815
       },
       {
         "value": 2,
-        "mean_ttd_s": 61.509516048431394,
+        "mean_ttd_s": 61.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5571428571428572,
-        "precision": 0.8046445824706694
+        "fp_per_day": 0.9,
+        "precision": 0.7194805194805195
       },
       {
         "value": 3,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 5,
-        "mean_ttd_s": 64.5095160484314,
+        "mean_ttd_s": 64.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.4714285714285714,
-        "precision": 0.8315871675623997
+        "fp_per_day": 0.8428571428571429,
+        "precision": 0.7317532467532467
       },
       {
         "value": 8,
-        "mean_ttd_s": 4282.909516048431,
+        "mean_ttd_s": 4281.26,
         "detection_rate": 1.0,
-        "fp_per_day": 0.4714285714285714,
-        "precision": 0.8224605631726375
+        "fp_per_day": 0.8428571428571429,
+        "precision": 0.7189195815626022
       }
     ],
     "batch_latency_s": [
       {
         "value": 30.0,
-        "mean_ttd_s": 38.509516048431394,
+        "mean_ttd_s": 38.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 150.0,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 300.0,
-        "mean_ttd_s": 92.5095160484314,
+        "mean_ttd_s": 92.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 900.0,
-        "mean_ttd_s": 212.5095160484314,
+        "mean_ttd_s": 212.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       }
     ],
     "exfil_key_threshold": [
       {
         "value": 10,
-        "mean_ttd_s": 50.56,
+        "mean_ttd_s": 50.64,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 25,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 50,
-        "mean_ttd_s": 80.88828505039216,
+        "mean_ttd_s": 80.96828505039215,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8223680413154097
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7306056841709015
       },
       {
         "value": 100,
         "mean_ttd_s": 116.96828505039215,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8223680413154097
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7306056841709015
       },
       {
         "value": 200,
         "mean_ttd_s": 212.08895622253416,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8138726718757678
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7190536865880115
       }
     ],
     "dedup_cooldown_s": [
       {
         "value": 60.0,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5142857142857142,
-        "precision": 0.8263019703408719
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7399104920844051
       },
       {
         "value": 300.0,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.5,
-        "precision": 0.8217832459937723
+        "fp_per_day": 0.8571428571428571,
+        "precision": 0.7294199134199134
       },
       {
         "value": 900.0,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.4857142857142857,
-        "precision": 0.8167905056759546
+        "fp_per_day": 0.8428571428571429,
+        "precision": 0.7208276372750057
       },
       {
         "value": 3600.0,
-        "mean_ttd_s": 62.509516048431394,
+        "mean_ttd_s": 62.56,
         "detection_rate": 1.0,
-        "fp_per_day": 0.4857142857142857,
-        "precision": 0.8167905056759546
+        "fp_per_day": 0.8428571428571429,
+        "precision": 0.7208276372750057
       }
     ]
   }

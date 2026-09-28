@@ -5,14 +5,14 @@
       "name": "Credential compromise of a mission operator account",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 47.56,
-      "ttd_ci95_s": 0.523645749635296,
+      "ttd_mean_s": 47.78,
+      "ttd_ci95_s": 0.4312,
       "ttd_median_s": 48.0,
       "ttd_p95_s": 48.0,
       "ttd_min_s": 26.0,
       "ttd_max_s": 48.0,
-      "ttc_mean_s": 67.56,
-      "ttc_ci95_s": 0.523645749635296,
+      "ttc_mean_s": 67.78,
+      "ttc_ci95_s": 0.4312,
       "first_rule_freq": {
         "R01": 100
       },
@@ -29,27 +29,27 @@
       "name": "Unauthorized telecommand against the spacecraft bus",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 1785.9,
-      "ttd_ci95_s": 1673.610700853201,
+      "ttd_mean_s": 558.5,
+      "ttd_ci95_s": 976.5332357111481,
       "ttd_median_s": 4.0,
-      "ttd_p95_s": 5924.0,
+      "ttd_p95_s": 4.0,
       "ttd_min_s": 4.0,
-      "ttd_max_s": 49544.0,
-      "ttc_mean_s": 1824.3,
-      "ttc_ci95_s": 1672.8506769464398,
+      "ttd_max_s": 49534.0,
+      "ttc_mean_s": 598.1,
+      "ttc_ci95_s": 976.1014314753991,
       "first_rule_freq": {
-        "R02": 92,
-        "R05": 8
+        "R02": 98,
+        "R05": 2
       },
       "contributing_rule_freq": {
-        "R02": 92,
-        "R03": 92,
-        "R04": 92,
+        "R02": 98,
+        "R03": 98,
+        "R04": 98,
         "R05": 100
       },
       "mean_malicious_successes": 0,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 5.6,
+      "mean_alerts": 5.9,
       "mean_critical_commands_executed": 0,
       "mean_bytes_exfiltrated": 0
     },
@@ -69,15 +69,15 @@
         "R06": 100
       },
       "contributing_rule_freq": {
-        "R02": 80,
+        "R02": 95,
         "R06": 100,
-        "R07": 77,
-        "R11": 80
+        "R07": 92,
+        "R11": 95
       },
-      "mean_malicious_successes": 27.6,
-      "mean_successes_after_containment": 21.6,
-      "mean_alerts": 3.57,
-      "mean_critical_commands_executed": 0.8,
+      "mean_malicious_successes": 27.9,
+      "mean_successes_after_containment": 21.9,
+      "mean_alerts": 3.87,
+      "mean_critical_commands_executed": 0.95,
       "mean_bytes_exfiltrated": 0
     },
     "A4": {
@@ -93,16 +93,14 @@
       "ttc_mean_s": 24.0,
       "ttc_ci95_s": 0.0,
       "first_rule_freq": {
-        "R08": 93,
-        "R05": 7
+        "R08": 100
       },
       "contributing_rule_freq": {
-        "R08": 100,
-        "R05": 7
+        "R08": 100
       },
       "mean_malicious_successes": 0,
       "mean_successes_after_containment": 0,
-      "mean_alerts": 2.14,
+      "mean_alerts": 2,
       "mean_critical_commands_executed": 0,
       "mean_bytes_exfiltrated": 0
     },
@@ -110,14 +108,14 @@
       "name": "Bulk exfiltration of archived mission telemetry",
       "detection_rate": 1.0,
       "containment_rate": 1.0,
-      "ttd_mean_s": 242.06288677930831,
-      "ttd_ci95_s": 1.9741887465807526,
+      "ttd_mean_s": 242.2481287550926,
+      "ttd_ci95_s": 1.9170576575095741,
       "ttd_median_s": 246.0,
       "ttd_p95_s": 246.0,
       "ttd_min_s": 166.81287550926208,
       "ttd_max_s": 246.0,
-      "ttc_mean_s": 262.8147580242157,
-      "ttc_ci95_s": 1.2954469177684091,
+      "ttc_mean_s": 263.0,
+      "ttc_ci95_s": 1.2021075096040554,
       "first_rule_freq": {
         "R09": 99,
         "R10": 1
@@ -127,55 +125,55 @@
         "R10": 99,
         "R11": 100
       },
-      "mean_malicious_successes": 24.2,
+      "mean_malicious_successes": 24.25,
       "mean_successes_after_containment": 0,
       "mean_alerts": 3,
       "mean_critical_commands_executed": 0,
-      "mean_bytes_exfiltrated": 1218025881.6
+      "mean_bytes_exfiltrated": 1220542464
     }
   },
   "rules": {
     "R01": {
       "tp": 100,
-      "fp": 32,
-      "precision": 0.7575757575757576,
-      "fp_per_day": 0.045714285714285714
+      "fp": 31,
+      "precision": 0.7633587786259542,
+      "fp_per_day": 0.04428571428571428
     },
     "R02": {
-      "tp": 172,
-      "fp": 12,
-      "precision": 0.9347826086956522,
-      "fp_per_day": 0.017142857142857144
+      "tp": 193,
+      "fp": 27,
+      "precision": 0.8772727272727273,
+      "fp_per_day": 0.03857142857142857
     },
     "R03": {
-      "tp": 92,
+      "tp": 98,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     },
     "R04": {
-      "tp": 276,
-      "fp": 4,
-      "precision": 0.9857142857142858,
-      "fp_per_day": 0.005714285714285714
+      "tp": 294,
+      "fp": 17,
+      "precision": 0.9453376205787781,
+      "fp_per_day": 0.024285714285714285
     },
     "R05": {
-      "tp": 114,
+      "tp": 100,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     },
     "R06": {
-      "tp": 120,
-      "fp": 5,
-      "precision": 0.96,
-      "fp_per_day": 0.007142857142857143
+      "tp": 105,
+      "fp": 4,
+      "precision": 0.963302752293578,
+      "fp_per_day": 0.005714285714285714
     },
     "R07": {
-      "tp": 77,
-      "fp": 159,
-      "precision": 0.326271186440678,
-      "fp_per_day": 0.22714285714285715
+      "tp": 92,
+      "fp": 380,
+      "precision": 0.19491525423728814,
+      "fp_per_day": 0.5428571428571428
     },
     "R08": {
       "tp": 200,
@@ -196,26 +194,27 @@
       "fp_per_day": 0.0
     },
     "R11": {
-      "tp": 180,
+      "tp": 195,
       "fp": 0,
       "precision": 1.0,
       "fp_per_day": 0.0
     }
   },
   "false_positives_per_day": {
-    "mean": 0.4457142857142857,
-    "ci95": 0.04160310788701471
+    "mean": 0.7985714285714286,
+    "ci95": 0.04760665431799987
   },
   "precision": {
-    "mean": 0.8345019097203779,
-    "ci95": 0.013174012837339114
+    "mean": 0.7419684524595819,
+    "ci95": 0.011911736677546674
   },
-  "events_per_trial": 5674.44,
-  "wall_time_s": 206.2,
+  "events_per_trial": 5822.76,
+  "wall_time_s": 205.4,
   "config": {
     "trials": 100,
     "warmup_days": 7.0,
     "measure_days": 7.0,
-    "seed0": 1000
+    "seed0": 1000,
+    "block_ttl_s": 86400.0
   }
 }

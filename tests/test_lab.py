@@ -172,6 +172,34 @@ def test_archive_volume_rule_reports_a_burst_that_containment_silenced():
     assert "R10" in outcome.all_rules, "R10 never evaluated the burst's hour"
 
 
+def test_automated_blocks_lift_after_their_ttl():
+    """A block that never lifts is a permanent outage for a false positive."""
+    from spacelab.blocks import BlockList
+
+    blocks = BlockList(ttl_s=3600.0)
+    blocks.add("l.costa", 1000.0)
+    assert blocks.blocked("l.costa", 1000.0)
+    assert blocks.blocked("l.costa", 4599.0)
+    assert not blocks.blocked("l.costa", 4600.0)
+
+    forever = BlockList(ttl_s=None)
+    forever.add("l.costa", 1000.0)
+    assert forever.blocked("l.costa", 10 ** 9)
+
+
+def test_expiring_blocks_restore_the_operator_without_freeing_the_attack():
+    """The expiry must not cost containment what it was bought for."""
+    expiring = run_trial(TrialConfig(seed=1000, warmup_days=7, measure_days=7))
+    permanent = run_trial(TrialConfig(
+        seed=1000, warmup_days=7, measure_days=7,
+        defenses=Defenses(block_ttl_s=None)))
+    for attack_id, outcome in expiring.outcomes.items():
+        assert outcome.detected, f"{attack_id} must still be detected"
+        assert outcome.successes_after_containment <= (
+            permanent.outcomes[attack_id].successes_after_containment
+        ), f"{attack_id} gained ground after containment"
+
+
 def test_determinism():
     """Same seed, same numbers - the reproducibility claim in the paper."""
     a = run_trial(TrialConfig(seed=99, warmup_days=4, measure_days=3))

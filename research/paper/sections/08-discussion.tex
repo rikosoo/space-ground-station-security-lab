@@ -97,10 +97,18 @@ changes what the telemetry contains, and a control that removes an actor from th
 system removes that actor's events along with it. The effect is not confined to
 this testbed: any architecture that disables accounts automatically and logs
 refusals at a different fidelity than successes will have the same blind spot.
-Two mitigations follow directly --- expire automated blocks rather than leaving
-them indefinite, and emit an explicit event when an action is refused because the
-principal is blocked, so that the refusal is itself a detectable signal. We did
-not implement either here; measuring them is future work.
+Two mitigations follow directly. The first is to expire automated blocks rather
+than leaving them indefinite, which is what this testbed now does: a block lifts
+after \BlockTTLHours{} hours, modelling a suspension an analyst releases after
+triage rather than an account that is deleted. It is not free:
+Table~\ref{tab:ablation} contrasts it with an arm in which blocks never lift, and
+the expiry raises false positives from \AblNoExpiryFP{} to \AblFullFP{} per day,
+because a restored account can trip a rule again where a suspended one never
+could. We take that trade as the right one, and report both halves of it. The
+second is to emit an explicit event when an action is refused because the
+principal is blocked, so that the refusal is itself a signal rather than a
+silence. We have not implemented that one, and it is the more general fix: it
+would make the blind spot visible even where a block is genuinely permanent.
 
 \subsection{Implications for practitioners}
 

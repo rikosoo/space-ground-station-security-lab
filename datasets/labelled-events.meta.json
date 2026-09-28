@@ -1,6 +1,6 @@
 {
   "file": "labelled-events.jsonl",
-  "events": 10350,
+  "events": 10643,
   "seed": 1000,
   "warmup_days": 7.0,
   "measure_days": 7.0,

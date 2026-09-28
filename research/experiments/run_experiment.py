@@ -62,7 +62,8 @@ def cmd_baseline(args) -> dict:
     agg = aggregate(trials)
     agg["wall_time_s"] = round(time.time() - t0, 1)
     agg["config"] = {"trials": n, "warmup_days": args.warmup,
-                     "measure_days": args.measure, "seed0": args.seed}
+                     "measure_days": args.measure, "seed0": args.seed,
+                     "block_ttl_s": Defenses().block_ttl_s}
 
     lines = ["# Baseline detection performance", "",
              f"{n} independent trials, {args.warmup:.0f}-day warm-up + "
@@ -115,6 +116,7 @@ ABLATIONS = [
     ("no_rate_limit", {"rate_limit": False}),
     ("no_pass_window", {"pass_window_check": False}),
     ("no_auto_response", {"auto_response": False}),
+    ("no_block_expiry", {"block_ttl_s": None}),
     ("none", {"mfa": False, "rbac": False, "sdls_authentication": False,
               "anti_replay_window": False, "rate_limit": False,
               "pass_window_check": False, "auto_response": False}),

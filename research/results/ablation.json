@@ -3,18 +3,18 @@
     "full": {
       "disabled": [],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 51.7,
-      "critical_commands_executed": 0.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 52.0,
+      "critical_commands_executed": 0.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 0,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8571428571428571,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -83,15 +83,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -107,16 +107,14 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
           "mean_malicious_successes": 0,
           "mean_successes_after_containment": 0,
-          "mean_alerts": 2.2,
+          "mean_alerts": 2,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
@@ -124,14 +122,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -140,11 +138,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -153,18 +151,18 @@
         "mfa"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 51.7,
-      "critical_commands_executed": 0.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 52.0,
+      "critical_commands_executed": 0.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 0,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8571428571428571,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -233,15 +231,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -257,16 +255,14 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
           "mean_malicious_successes": 0,
           "mean_successes_after_containment": 0,
-          "mean_alerts": 2.2,
+          "mean_alerts": 2,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
@@ -274,14 +270,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -290,11 +286,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -303,18 +299,18 @@
         "rbac"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 53.7,
-      "critical_commands_executed": 1.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 54.0,
+      "critical_commands_executed": 1.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 2,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5285714285714286,
+      "fp_per_day": 0.8857142857142857,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -383,15 +379,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -407,16 +403,14 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
           "mean_malicious_successes": 0,
           "mean_successes_after_containment": 0,
-          "mean_alerts": 2.2,
+          "mean_alerts": 2,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
@@ -424,14 +418,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -440,11 +434,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -453,18 +447,18 @@
         "sdls_authentication"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 53.7,
-      "critical_commands_executed": 2.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 54.0,
+      "critical_commands_executed": 2.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 2,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8571428571428571,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -532,15 +526,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -571,14 +565,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -587,11 +581,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -600,18 +594,18 @@
         "anti_replay_window"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 54.400000000000006,
-      "critical_commands_executed": 2.0,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 55.0,
+      "critical_commands_executed": 0.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 0,
-        "A3": 27.6,
-        "A4": 2.7,
-        "A5": 24.1
+        "A3": 27.8,
+        "A4": 3,
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8428571428571429,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -680,15 +674,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -704,31 +698,29 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
-          "mean_malicious_successes": 2.7,
-          "mean_successes_after_containment": 1.8,
-          "mean_alerts": 2.2,
-          "mean_critical_commands_executed": 1.2,
+          "mean_malicious_successes": 3,
+          "mean_successes_after_containment": 2,
+          "mean_alerts": 2,
+          "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
         "A5": {
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -737,11 +729,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -750,18 +742,18 @@
         "rate_limit"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 51.7,
-      "critical_commands_executed": 0.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 52.0,
+      "critical_commands_executed": 0.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 0,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8571428571428571,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -830,15 +822,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -854,16 +846,14 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
           "mean_malicious_successes": 0,
           "mean_successes_after_containment": 0,
-          "mean_alerts": 2.2,
+          "mean_alerts": 2,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
@@ -871,14 +861,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -887,11 +877,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -900,18 +890,18 @@
         "pass_window_check"
       ],
       "detection_rate": 1.0,
-      "mean_ttd_s": 62.509516048431394,
-      "total_malicious_successes": 51.7,
-      "critical_commands_executed": 0.8,
-      "mb_exfiltrated": 1212.9927168,
+      "mean_ttd_s": 62.56,
+      "total_malicious_successes": 52.0,
+      "critical_commands_executed": 0.9,
+      "mb_exfiltrated": 1218.0258815999998,
       "successes_by_attack": {
         "A1": 0,
         "A2": 0,
-        "A3": 27.6,
+        "A3": 27.8,
         "A4": 0,
-        "A5": 24.1
+        "A5": 24.2
       },
-      "fp_per_day": 0.5,
+      "fp_per_day": 0.8571428571428571,
       "attacks": {
         "A1": {
           "name": "Credential compromise of a mission operator account",
@@ -980,15 +970,15 @@
             "R06": 10
           },
           "contributing_rule_freq": {
-            "R02": 8,
+            "R02": 9,
             "R06": 10,
-            "R07": 8,
-            "R11": 8
+            "R07": 9,
+            "R11": 9
           },
-          "mean_malicious_successes": 27.6,
-          "mean_successes_after_containment": 21.6,
-          "mean_alerts": 3.6,
-          "mean_critical_commands_executed": 0.8,
+          "mean_malicious_successes": 27.8,
+          "mean_successes_after_containment": 21.8,
+          "mean_alerts": 3.8,
+          "mean_critical_commands_executed": 0.9,
           "mean_bytes_exfiltrated": 0
         },
         "A4": {
@@ -1004,16 +994,14 @@
           "ttc_mean_s": 24.0,
           "ttc_ci95_s": 0.0,
           "first_rule_freq": {
-            "R08": 9,
-            "R05": 1
+            "R08": 10
           },
           "contributing_rule_freq": {
-            "R08": 10,
-            "R05": 1
+            "R08": 10
           },
           "mean_malicious_successes": 0,
           "mean_successes_after_containment": 0,
-          "mean_alerts": 2.2,
+          "mean_alerts": 2,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 0
         },
@@ -1021,14 +1009,14 @@
           "name": "Bulk exfiltration of archived mission telemetry",
           "detection_rate": 1.0,
           "containment_rate": 1.0,
-          "ttd_mean_s": 242.54758024215698,
-          "ttd_ci95_s": 4.470191720980439,
+          "ttd_mean_s": 242.8,
+          "ttd_ci95_s": 4.0146788442193255,
           "ttd_median_s": 246.0,
           "ttd_p95_s": 246.0,
-          "ttd_min_s": 223.47580242156982,
+          "ttd_min_s": 226.0,
           "ttd_max_s": 246.0,
-          "ttc_mean_s": 262.547580242157,
-          "ttc_ci95_s": 4.470191720980439,
+          "ttc_mean_s": 262.8,
+          "ttc_ci95_s": 4.0146788442193255,
           "first_rule_freq": {
             "R09": 10
           },
@@ -1037,11 +1025,11 @@
             "R10": 10,
             "R11": 10
           },
-          "mean_malicious_successes": 24.1,
+          "mean_malicious_successes": 24.2,
           "mean_successes_after_containment": 0,
           "mean_alerts": 3,
           "mean_critical_commands_executed": 0,
-          "mean_bytes_exfiltrated": 1212992716.8
+          "mean_bytes_exfiltrated": 1218025881.6
         }
       }
     },
@@ -1190,6 +1178,156 @@
           "mean_alerts": 5.9,
           "mean_critical_commands_executed": 0,
           "mean_bytes_exfiltrated": 13086228480
+        }
+      }
+    },
+    "no_block_expiry": {
+      "disabled": [
+        "block_ttl_s"
+      ],
+      "detection_rate": 1.0,
+      "mean_ttd_s": 62.509516048431394,
+      "total_malicious_successes": 51.7,
+      "critical_commands_executed": 0.8,
+      "mb_exfiltrated": 1212.9927168,
+      "successes_by_attack": {
+        "A1": 0,
+        "A2": 0,
+        "A3": 27.6,
+        "A4": 0,
+        "A5": 24.1
+      },
+      "fp_per_day": 0.5,
+      "attacks": {
+        "A1": {
+          "name": "Credential compromise of a mission operator account",
+          "detection_rate": 1.0,
+          "containment_rate": 1.0,
+          "ttd_mean_s": 48.0,
+          "ttd_ci95_s": 0.0,
+          "ttd_median_s": 48.0,
+          "ttd_p95_s": 48.0,
+          "ttd_min_s": 48.0,
+          "ttd_max_s": 48.0,
+          "ttc_mean_s": 68.0,
+          "ttc_ci95_s": 0.0,
+          "first_rule_freq": {
+            "R01": 10
+          },
+          "contributing_rule_freq": {
+            "R01": 10
+          },
+          "mean_malicious_successes": 0,
+          "mean_successes_after_containment": 0,
+          "mean_alerts": 1,
+          "mean_critical_commands_executed": 0,
+          "mean_bytes_exfiltrated": 0
+        },
+        "A2": {
+          "name": "Unauthorized telecommand against the spacecraft bus",
+          "detection_rate": 1.0,
+          "containment_rate": 1.0,
+          "ttd_mean_s": 4.0,
+          "ttd_ci95_s": 0.0,
+          "ttd_median_s": 4.0,
+          "ttd_p95_s": 4.0,
+          "ttd_min_s": 4.0,
+          "ttd_max_s": 4.0,
+          "ttc_mean_s": 44.0,
+          "ttc_ci95_s": 0.0,
+          "first_rule_freq": {
+            "R02": 10
+          },
+          "contributing_rule_freq": {
+            "R02": 10,
+            "R03": 10,
+            "R04": 10,
+            "R05": 10
+          },
+          "mean_malicious_successes": 0,
+          "mean_successes_after_containment": 0,
+          "mean_alerts": 6,
+          "mean_critical_commands_executed": 0,
+          "mean_bytes_exfiltrated": 0
+        },
+        "A3": {
+          "name": "False data injection into the telemetry stream",
+          "detection_rate": 1.0,
+          "containment_rate": 1.0,
+          "ttd_mean_s": 14.0,
+          "ttd_ci95_s": 0.0,
+          "ttd_median_s": 14.0,
+          "ttd_p95_s": 14.0,
+          "ttd_min_s": 14.0,
+          "ttd_max_s": 14.0,
+          "ttc_mean_s": 34.0,
+          "ttc_ci95_s": 0.0,
+          "first_rule_freq": {
+            "R06": 10
+          },
+          "contributing_rule_freq": {
+            "R02": 8,
+            "R06": 10,
+            "R07": 8,
+            "R11": 8
+          },
+          "mean_malicious_successes": 27.6,
+          "mean_successes_after_containment": 21.6,
+          "mean_alerts": 3.6,
+          "mean_critical_commands_executed": 0.8,
+          "mean_bytes_exfiltrated": 0
+        },
+        "A4": {
+          "name": "Replay of a captured authenticated telecommand",
+          "detection_rate": 1.0,
+          "containment_rate": 1.0,
+          "ttd_mean_s": 4.0,
+          "ttd_ci95_s": 0.0,
+          "ttd_median_s": 4.0,
+          "ttd_p95_s": 4.0,
+          "ttd_min_s": 4.0,
+          "ttd_max_s": 4.0,
+          "ttc_mean_s": 24.0,
+          "ttc_ci95_s": 0.0,
+          "first_rule_freq": {
+            "R08": 9,
+            "R05": 1
+          },
+          "contributing_rule_freq": {
+            "R08": 10,
+            "R05": 1
+          },
+          "mean_malicious_successes": 0,
+          "mean_successes_after_containment": 0,
+          "mean_alerts": 2.2,
+          "mean_critical_commands_executed": 0,
+          "mean_bytes_exfiltrated": 0
+        },
+        "A5": {
+          "name": "Bulk exfiltration of archived mission telemetry",
+          "detection_rate": 1.0,
+          "containment_rate": 1.0,
+          "ttd_mean_s": 242.54758024215698,
+          "ttd_ci95_s": 4.470191720980439,
+          "ttd_median_s": 246.0,
+          "ttd_p95_s": 246.0,
+          "ttd_min_s": 223.47580242156982,
+          "ttd_max_s": 246.0,
+          "ttc_mean_s": 262.547580242157,
+          "ttc_ci95_s": 4.470191720980439,
+          "first_rule_freq": {
+            "R09": 10
+          },
+          "contributing_rule_freq": {
+            "R09": 10,
+            "R10": 10,
+            "R11": 10
+          },
+          "mean_malicious_successes": 24.1,
+          "mean_successes_after_containment": 0,
+          "mean_alerts": 3,
+          "mean_critical_commands_executed": 0,
+          "mean_bytes_exfiltrated": 1212992716.8
         }
       }
     },

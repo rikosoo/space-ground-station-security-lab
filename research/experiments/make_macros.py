@@ -29,7 +29,8 @@ ABLATION_LABELS = {
     "no_sdls_auth": "No frame authentication",
     "no_anti_replay": "No anti-replay window", "no_rate_limit": "No rate limit",
     "no_pass_window": "No pass-window check",
-    "no_auto_response": "No automated containment", "none": "No controls",
+    "no_auto_response": "No automated containment",
+    "no_block_expiry": "Blocks never expire", "none": "No controls",
 }
 
 
@@ -60,6 +61,10 @@ def main() -> None:
         rf"\newcommand{{\ResFPDay}}{{{base['false_positives_per_day']['mean']:.2f}}}",
         rf"\newcommand{{\ResFPDayCI}}{{{base['false_positives_per_day']['ci95']:.2f}}}",
         rf"\newcommand{{\ResPrecision}}{{{base['precision']['mean'] * 100:.1f}}}",
+        rf"\newcommand{{\ResFPWeek}}"
+        rf"{{{base['false_positives_per_day']['mean'] * 7:.1f}}}",
+        rf"\newcommand{{\BlockTTLHours}}"
+        rf"{{{base['config']['block_ttl_s'] / 3600:.0f}}}",
     ]
     # LaTeX command names cannot contain digits, so A1..A5 become Aone..Afive.
     words = {"1": "one", "2": "two", "3": "three", "4": "four", "5": "five"}
@@ -142,6 +147,11 @@ def main() -> None:
         rf"\newcommand{{\AblFullSucc}}{{{full['total_malicious_successes']:.1f}}}",
         rf"\newcommand{{\AblNoResponseSucc}}"
         rf"{{{abl['configurations']['no_auto_response']['total_malicious_successes']:.1f}}}",
+        rf"\newcommand{{\AblFullFP}}{{{full['fp_per_day']:.2f}}}",
+        rf"\newcommand{{\AblNoExpiryFP}}"
+        rf"{{{abl['configurations']['no_block_expiry']['fp_per_day']:.2f}}}",
+        rf"\newcommand{{\AblNoExpirySucc}}"
+        rf"{{{abl['configurations']['no_block_expiry']['total_malicious_successes']:.1f}}}",
     ]
 
     # ---- sweeps -------------------------------------------------------------

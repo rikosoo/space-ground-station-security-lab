@@ -2,7 +2,7 @@
   "workload": {
     "spacecraft": 1,
     "ground_stations": 1,
-    "security_events_per_day": 810.6342857142856,
+    "security_events_per_day": 831.8228571428572,
     "bytes_per_event": 900,
     "telemetry_objects_per_day": 60.0,
     "telemetry_object_mb": 48.0,
@@ -15,7 +15,7 @@
     "custom_metrics": 40,
     "days": 30.0
   },
-  "total_monthly_usd": 419.36145607389636,
+  "total_monthly_usd": 419.3653195984874,
   "lines": [
     {
       "service": "Kinesis Data Streams",
@@ -27,30 +27,30 @@
     {
       "service": "Kinesis Data Streams",
       "driver": "ingested events",
-      "quantity": 0.021887125714285707,
+      "quantity": 0.022459217142857146,
       "unit": "GB",
-      "monthly_usd": 0.0017509700571428565
+      "monthly_usd": 0.0017967373714285718
     },
     {
       "service": "Lambda",
       "driver": "detection invocations",
-      "quantity": 24319.028571428567,
+      "quantity": 24954.685714285715,
       "unit": "invocation",
-      "monthly_usd": 0.013983459667842858
+      "monthly_usd": 0.014348963001728571
     },
     {
       "service": "CloudWatch Logs",
       "driver": "log ingestion",
-      "quantity": 0.021887125714285707,
+      "quantity": 0.022459217142857146,
       "unit": "GB",
-      "monthly_usd": 0.010943562857142854
+      "monthly_usd": 0.011229608571428573
     },
     {
       "service": "CloudWatch Logs",
       "driver": "log retention",
-      "quantity": 0.06566137714285712,
+      "quantity": 0.06737765142857144,
       "unit": "GB-month",
-      "monthly_usd": 0.0019698413142857137
+      "monthly_usd": 0.002021329542857143
     },
     {
       "service": "CloudWatch",
@@ -83,9 +83,9 @@
     {
       "service": "EventBridge",
       "driver": "rule matches",
-      "quantity": 24319.028571428567,
+      "quantity": 24954.685714285715,
       "unit": "event",
-      "monthly_usd": 0.024319028571428567
+      "monthly_usd": 0.024954685714285715
     },
     {
       "service": "OpenSearch Serverless",
@@ -104,16 +104,16 @@
     {
       "service": "GuardDuty",
       "driver": "data analysed",
-      "quantity": 0.021887125714285707,
+      "quantity": 0.022459217142857146,
       "unit": "GB",
-      "monthly_usd": 0.021887125714285707
+      "monthly_usd": 0.022459217142857146
     },
     {
       "service": "KMS",
       "driver": "key + requests",
       "quantity": 2,
       "unit": "key",
-      "monthly_usd": 2.0729570857142856
+      "monthly_usd": 2.074864057142857
     },
     {
       "service": "SNS",
@@ -123,5 +123,5 @@
       "monthly_usd": 4.5e-05
     }
   ],
-  "scaling": "| Spacecraft | Events/day | USD/month | USD/spacecraft/month |\n|---:|---:|---:|---:|\n| 1 | 811 | 419.36 | 419.36 |\n| 10 | 8,106 | 1,660.77 | 166.08 |\n| 100 | 81,063 | 7,989.04 | 79.89 |"
+  "scaling": "| Spacecraft | Events/day | USD/month | USD/spacecraft/month |\n|---:|---:|---:|---:|\n| 1 | 832 | 419.37 | 419.37 |\n| 10 | 8,318 | 1,660.81 | 166.08 |\n| 100 | 83,182 | 7,989.42 | 79.89 |"
 }
